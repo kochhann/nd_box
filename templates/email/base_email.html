@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:v="urn:schemas-microsoft-com:vml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
+
+    <link href='https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,600,700' rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Quicksand:300,400,700' rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <style>
+        #wrapper {
+            position: relative;
+            float: none;
+            width: 100%;
+            margin: 0 auto;
+            background-color: #FFF;
+        }
+
+        @media (min-width: 1200px) {
+            body:not(.stretched) #wrapper {
+                max-width: 1200px;
+            }
+        }
+
+        @media (min-width: 1440px) {
+            body:not(.stretched) #wrapper {
+                max-width: 1440px;
+            }
+        }
+        .n-text {
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: grey;
+            font-size: 1.5rem;
+        }
+        .navbar-brand {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .b-text {
+            color: grey;
+
+    </style>
+
+    <title>Mensagem do Sistema ND Box</title>
+
+</head>
+<body class="respond" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+
+    <!-- Document Wrapper
+	============================================= -->
+	<div id="wrapper" class="clearfix">
+        <!-- Top Bar
+		============================================= -->
+		<div id="top-bar">
+			<div class="container clearfix">
+                <span class="navbar-brand n-text">ND Box | {{ sender }}</span>
+				<div class="row justify-content-between navbar-brand" style="float: right;">
+					<div class="col-12 col-md-auto">
+                        <img src="https://otordame.sirv.com/Images/notre_dame/v02.png" style="max-width: 60px; height: auto;" alt="" />
+					</div>
+				</div>
+                {% block content %} {% endblock %}
+
+
+			</div>
+		</div><!-- #top-bar end -->
+    </div><!-- #wrapper end -->
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

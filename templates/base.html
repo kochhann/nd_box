@@ -1,0 +1,404 @@
+{% load static %}
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700|Poppins:300,400,500,600,700|PT+Serif:400,400i&display=swap"
+          rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/dark.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/font-icons.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/magnific-popup.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/bs-filestyle.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/bs-select.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/datepicker.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/bs-datatable.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet" type="text/css" />
+
+    <style>
+        .just-text {
+            text-align: justify;
+            text-justify: inter-word;
+        }
+        label {
+            color: #172A60;
+        }
+
+    </style>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="icon" type="image/png" href="{% static 'favicon-16x16.png' %}" sizes="16x16">
+    <link rel="icon" type="image/png" href="{% static 'favicon-32x32.png' %}" sizes="32x32">
+
+
+	<!-- Document Title
+	============================================= -->
+	<title>ND Box | {{ doc_title }}</title>
+</head>
+<body class="stretched">
+
+    <!-- Document Wrapper
+	============================================= -->
+    <div id="wrapper" class="clearfix">
+
+        <!-- Top Bar
+		============================================= -->
+		<div id="top-bar">
+			<div class="container clearfix">
+                <span class="navbar-brand">ND Box | {{ top_app_name }}</span>
+				<div class="row justify-content-between" style="float: right;">
+					<div class="col-12 col-md-auto">
+
+						<!-- Top Social
+						============================================= -->
+						<ul id="top-social">
+                            {% if top_app_name != 'Switch' %}
+                                <li><a href="#" onclick="history.back();" class="si-openid"><span class="ts-icon"><i class="icon-backward"></i></span><span class="ts-text">Voltar</span></a></li>
+                            {% endif %}
+                            <li><a href="{% url 'index' %}" target="_self" class="si-digg"><span class="ts-icon"><i class="icon-map-marker-alt"></i></span><span class="ts-text">Home</span></a></li>
+                            <li><a href="https://www.nd.org.br" target="_blank" class="si-podcast"><span class="ts-icon"><i class="icon-school"></i></span><span class="ts-text">Site ND</span></a></li>
+							<li><a href="https://www.facebook.com/redenotredame" target="_blank" class="si-facebook"><span class="ts-icon"><i class="icon-facebook"></i></span><span class="ts-text">Facebook</span></a></li>
+							<li><a href="https://www.instagram.com/redenotredame" target="_blank" class="si-instagram"><span class="ts-icon"><i class="icon-instagram2"></i></span><span class="ts-text">Instagram</span></a></li>
+							<li><a href="https://www.google.com/accounts/Login" target="_blank" class="si-email3"><span class="ts-icon"><i class="icon-email3"></i></span><span class="ts-text">Webmail</span></a></li>
+                            {% if not user.is_anonymous %}
+                                <li><a href="#" target="_self" class="si-twitter"><span class="ts-icon"><i class="icon-user-alt"></i></span><span class="ts-text">{{user.get_short_name}}</span></a></li>
+                                <li><a href="{% url 'logout' %}" target="_self" class="si-youtube"><span class="ts-icon"><i class="icon-sign-out-alt"></i></span><span class="ts-text">Sair</span></a></li>
+                            {% else %}
+                                <li><a href="{% url 'login' %}" target="_self" class="si-evernote"><span class="ts-icon"><i class="icon-sign-in-alt"></i></span><span class="ts-text">Entrar</span></a></li>
+                            {% endif %}
+                            {% if user.is_staff %}
+                                <li><a href="{% url 'admin:index' %}" target="_self" class="si-digg"><span class="ts-icon"><i class="icon-cog"></i></span><span class="ts-text">Gerenciamento</span></a></li>
+                            {% endif %}
+						</ul><!-- #top-social end -->
+
+					</div>
+
+				</div>
+
+			</div>
+		</div><!-- #top-bar end -->
+
+        <!-- Page Title
+        ============================================= -->
+        <section id="page-title" class="page-title-center" style="">
+
+            <div class="container clearfix">
+                <img src="{% static 'images/notre-dame.png' %}" alt="" style="padding: 20px;">
+
+                <h1>{{ pt_h1 }}</h1>
+                <span>{{ pt_span }}</span>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ pt_breadcrumb2 }}</li>
+                </ol>
+            </div>
+
+        </section><!-- #page-title end -->
+
+        {% include 'messages.html' %}
+
+        <!-- Content
+		============================================= -->
+
+        {% block content %}    {% endblock %}
+
+
+        <!-- Footer
+		============================================= -->
+		<footer id="footer" class="bg-white border-0">
+
+			<div id="copyrights" class="bg-color dark py-5">
+				<div class="container">
+
+                    <div class="row justify-content-between col-mb-30">
+						<div class="col-12 col-lg-auto text-center text-lg-start">
+							Copyrights &copy; 2021 Associação Notre Dame<br>
+							<div class="copyright-links"><a href="{% url 'privacidade' %}" class="text-white-50" target="_blank">Política de Privacidade</a></div>
+						</div>
+
+						<div class="col-12 col-lg-auto text-center text-lg-end">
+
+							<a href="https://www.nd.org.br" target="_blank" class="social-icon inline-block si-small si-borderless mb-0 si-podcast">
+								<i class="icon-school"></i>
+								<i class="icon-school"></i>
+							</a>
+
+                            <a href="https://www.facebook.com/redenotredame" target="_blank" class="social-icon inline-block si-small si-borderless mb-0 si-facebook">
+								<i class="icon-facebook"></i>
+								<i class="icon-facebook"></i>
+							</a>
+
+                            <a href="https://www.instagram.com/redenotredame" target="_blank" class="social-icon inline-block si-small si-borderless mb-0 si-instagram">
+								<i class="icon-instagram"></i>
+								<i class="icon-instagram"></i>
+							</a>
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</footer><!-- #footer end -->
+
+    </div><!-- #wrapper end -->
+
+    <!-- Go To Top
+	============================================= -->
+	<div id="gotoTop" class="icon-angle-up"></div>
+
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/jquery.mask.min.js' %}"></script>
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script src="{% static 'js/functions.js' %}"></script>
+    <script src="{% static 'js/wow.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/jquery.nav.js' %}"></script>
+    <script src="{% static 'js/bs-filestyle.js' %}"></script>
+    <script src="{% static 'js/bs-select.js' %}"></script>
+    <script src="{% static 'js/ajax.js' %}"></script>
+    <script src="{% static 'js/datepicker.js' %}"></script>
+    <script src="{% static 'js/bs-datatable.js' %}"></script>
+
+    <script>
+		jQuery(document).ready( function(){
+            $("#jobs-resume").fileinput({
+				required: true,
+				browseClass: "btn btn-secondary",
+				browseIcon: "",
+				removeClass: "btn btn-danger",
+				removeLabel: "",
+				removeIcon: "<i class='icon-trash-alt1'></i>",
+				showUpload: false
+			});
+		})
+	</script>
+    <script>
+		jQuery(document).ready(function($){
+			var $faqItems = $('#faqs .faq');
+			if( window.location.hash != '' ) {
+				var getFaqFilterHash = window.location.hash;
+				var hashFaqFilter = getFaqFilterHash.split('#');
+				if( $faqItems.hasClass( hashFaqFilter[1] ) ) {
+					$('.grid-filter li').removeClass('activeFilter');
+					$( '[data-filter=".'+ hashFaqFilter[1] +'"]' ).parent('li').addClass('activeFilter');
+					var hashFaqSelector = '.' + hashFaqFilter[1];
+					$faqItems.css('display', 'none');
+					if( hashFaqSelector != 'all' ) {
+						$( hashFaqSelector ).fadeIn(500);
+					} else {
+						$faqItems.fadeIn(500);
+					}
+				}
+			}
+
+			$('.grid-filter a').on( 'click', function(){
+				$('.grid-filter li').removeClass('activeFilter');
+				$(this).parent('li').addClass('activeFilter');
+				var faqSelector = $(this).attr('data-filter');
+				$faqItems.css('display', 'none');
+				if( faqSelector != 'all' ) {
+					$( faqSelector ).fadeIn(500);
+				} else {
+					$faqItems.fadeIn(500);
+				}
+				return false;
+		   });
+		});
+	</script>
+    <script>
+        let elem = $(".toggle-password");
+
+        elem.each( function(){
+            let el = $(this),
+            btn = el.find(".btn-password-toggle"),
+            iconOn = el.attr('data-icon-on') || 'icon-line-eye',
+            iconOff = el.attr('data-icon-off') || 'icon-line-eye-off',
+            input = el.find('input');
+
+            btn.off( 'click' ).on( 'click', function(){
+                if (input.attr('type') === "password") {
+                    input.attr('type', 'text');
+                    btn.removeClass(iconOn).addClass(iconOff);
+                }
+                else {
+                    input.attr('type', 'password');
+                    btn.removeClass(iconOff).addClass(iconOn);
+                }
+
+                return false;
+            });
+        });
+
+        function cpf_mask(i){
+            var v = i.value;
+            if(isNaN(v[v.length-1])){
+                i.value = v.substring(0, v.length-1);
+                return;
+            }
+            i.setAttribute("maxlength", "14");
+            if (v.length == 3 || v.length == 7) i.value += ".";
+            if (v.length == 11) i.value += "-";
+        }
+	</script>
+    <script>
+        $(function() {
+			$('.component-datepicker.default').datepicker({
+				autoclose: true,
+				todayHighlight: true,
+				format: "dd/mm/yyyy",
+				daysOfWeekHighlighted: "0"
+			});
+
+			$('.component-datepicker.multidate').datepicker({
+				multidate: true,
+				multidateSeparator: " , "
+			});
+
+			$('.component-datepicker.input-daterange').datepicker({
+				autoclose: true,
+				format: "dd/mm/yyyy",
+				daysOfWeekHighlighted: "0"
+			});
+		});
+    </script>
+    <script>
+        function countChar(val) {
+          var len = val.value.length;
+          if (len >= 1000) {
+            val.value = val.value.substring(0, 1000);
+          } else {
+            $('#charNum').text(1000 - len);
+          }
+        };
+    </script>
+    <script>
+        $(window).on('load', function() {
+
+          /*Page Loader active
+          ========================================================*/
+          $('#preloader').fadeOut();
+
+          // Sticky Nav
+            $(window).on('scroll', function() {
+                if ($(window).scrollTop() > 50) {
+                    $('.scrolling-navbar').addClass('top-nav-collapse');
+                } else {
+                    $('.scrolling-navbar').removeClass('top-nav-collapse');
+                }
+            });
+
+            // one page navigation
+            $('.navbar-nav').onePageNav({
+              currentClass: 'active'
+            });
+
+            /* Auto Close Responsive Navbar on Click
+            ========================================================*/
+            function close_toggle() {
+                if ($(window).width() <= 768) {
+                    $('.navbar-collapse a').on('click', function () {
+                        $('.navbar-collapse').collapse('hide');
+                    });
+                }
+                else {
+                    $('.navbar .navbar-inverse a').off('click');
+                }
+            }
+            close_toggle();
+            $(window).resize(close_toggle);
+
+            /* WOW Scroll Spy
+            ========================================================*/
+             var wow = new WOW({
+              //disabled for mobile
+                mobile: false
+            });
+
+            wow.init();
+
+             /* Testimonials Carousel
+            ========================================================*/
+            var owl = $("#testimonials");
+              owl.owlCarousel({
+                loop: true,
+                nav: false,
+                dots: true,
+                center: true,
+                margin: 15,
+                slideSpeed: 1000,
+                stopOnHover: true,
+                autoPlay: true,
+                responsiveClass: true,
+                responsiveRefreshRate: true,
+                responsive : {
+                    0 : {
+                        items: 1
+                    },
+                    768 : {
+                        items: 2
+                    },
+                    960 : {
+                        items: 3
+                    },
+                    1200 : {
+                        items: 3
+                    },
+                    1920 : {
+                        items: 3
+                    }
+                }
+              });
+
+
+            /* Back Top Link active
+            ========================================================*/
+              var offset = 200;
+              var duration = 500;
+              $(window).scroll(function() {
+                if ($(this).scrollTop() > offset) {
+                  $('.back-to-top').fadeIn(400);
+                } else {
+                  $('.back-to-top').fadeOut(400);
+                }
+              });
+
+              $('.back-to-top').on('click',function(event) {
+                event.preventDefault();
+                $('html, body').animate({
+                  scrollTop: 0
+                }, 600);
+                return false;
+              });
+
+          });
+
+    </script>
+    <script>
+
+		$(document).ready(function () {
+            $('#datatable1').dataTable({
+                language: {
+                    lengthMenu: 'Exibindo _MENU_ registros por página',
+                    zeroRecords: 'Desculpe, sem registros compatíveis',
+                    info: 'Pág _PAGE_ de _PAGES_',
+                    infoEmpty: 'Sem registros',
+                    infoFiltered: '(de um total de _MAX_ vagas)',
+                    search: 'Busca',
+                    paginate: {
+                        first: 'Primeiro',
+                        last: 'Último',
+                        next: 'Próximo',
+                        previous: 'Anterior'
+                    },
+                },
+            });
+        });
+
+	</script>
+
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!-- Modal -->
+<div class="modal fade" id="modal_delete_vaga" tabindex="-1" role="dialog" aria-labelledby="modal_delete_vaga_label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Confirmar exclusão</h4>
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <h3>Tem certeza que deseja excluir esta vaga?</h3>
+                <div class="entry-content">
+                    <form method="POST" action="{% url 'vaga-delete' object.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

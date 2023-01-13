@@ -1,0 +1,29 @@
+<!-- Modal -->
+<div class="modal fade" id="modal_tipo_solicitacao" tabindex="-1" role="dialog" aria-labelledby="modal_tipo_solicitacao_label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Escolha o tipo de solicitação</h4>
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+
+            <div class="modal-body">
+                {% for item in tp_solicitacoes %}
+                <a href="{% url 'autorizacao-create' item.pk%}" class="button button-small button-border button-rounded button-blue"
+                   style="float: center;">
+                    {{item.nome}}
+                </a>
+                {% empty %}
+                <p> Sem modelos cadastrados </p>
+                {% endfor %}
+                <a href="#" class="button button-small button-border button-rounded button-blue"
+                   style="float: center;">
+                    Outra solicitação
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,64 @@
+{% extends 'carreiras_base.html' %}
+{% block carreiras %}
+<div class="heading-block fancy-title nobottomborder">
+    <table class="table" style="table-layout: auto;">
+        <tr>
+            <td width="60%"><h4>{{ object.titulo }} - {% if object.aberta %} Aberta {% else %} Fechada {% endif %}</h4></td>
+            <td align="right">
+                {% if object.aberta %}
+                <a type="button" class="button button-small button-border button-rounded button-blue"
+                href="{% url 'vaga-fechar' object.pk %}">
+                    Fechar vaga
+                </a>
+                <a type="button" class="button button-small button-border button-rounded button-blue"
+                href="{% url 'vaga-update' object.pk %}">
+                    Alterar
+                </a>
+                {% else %}
+                <a href="#" class="button button-small button-border button-rounded button-red" style="float: right;"
+                       data-bs-toggle="modal" data-bs-target="#modal_delete_vaga">Excluir</a>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="ps-md-4">
+    <div class="entry-meta">
+        <ul>
+            <li><i class="icon-line2-puzzle"></i><a href="{% url 'candidatura-vaga' object.pk %}"> {{ object.nbr_applications }} Aplicações</a></li>
+        </ul>
+    </div>
+    <div class="divider" style="margin: 1rem auto;"></div>
+    <div class="table-responsive">
+        <table class="table">
+            <col width="20%">
+            <col width="80%">
+            <tbody>
+                <tr>
+                    <td><b>Unidade</b></td>
+                    <td>{{object.unidade}}</td>
+                </tr>
+                <tr>
+                    <td><b>Área</b></td>
+                    <td>{{object.area_interesse}}</td>
+                </tr>
+                <tr>
+                    <td><b>Escolaridade</b></td>
+                    <td>{{object.escolaridade}}</td>
+                </tr>
+                <tr>
+                    <td><b>Tempo de experiência</b></td>
+                    <td>{{object.tempo_experiencia}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <p>
+        {{ object.descricao }}
+    </p>
+    {% include 'vaga_deletion_modal.html' %}
+
+</div>
+
+{% endblock %}

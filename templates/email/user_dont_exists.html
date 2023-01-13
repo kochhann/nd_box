@@ -1,0 +1,39 @@
+{% extends 'email/base_email.html' %}
+{% block content %}
+
+<div class="fancy-title title-bottom-border">
+    <h2 class="b-text">Solicitação de cadastro no Sistema ND Box</h2>
+</div>
+<br>
+<p class="b-text">Você solicitou registro no sistema ND Box, com os dados abaixo:</p>
+<ul>
+    <li class="b-text">Nome: {{name}}</li>
+    <li class="b-text">E-mail: {{email}}</li>
+</ul>
+<br>
+<p class="b-text">
+    A solicitação não poderá ser atendida, porque não encontramos o seu cadastro em nenhuma das nossas unidades. Por favor,
+    se isto for um equívoco, procure a unidade à qual está vinculado e reveja os seus dados.
+</p>
+<br>
+<p class="b-text">
+    Você pode obter uma certificação de tratamento de dados pessoais através do <a href="https://www.webnd.com.br/nd_box/privacidade/"> portal de privacidade. </a>>
+</p>
+<br>
+<p class="b-text">
+    Caso não tenha feito nenhuma solicitação, encaminhe este e-mail para dpo@nd.org.br.
+</p>
+<br>
+<p class="b-text">
+    Os dados inseridos no formulário on-line não foram salvos em nossas bases.
+</p>
+<br>
+<p class="b-text">
+    Esta é uma mensagem automática, não responda. Para mais informações, envie mensagem para tecnologia@nd.org.br
+</p>
+<br>
+<br>
+<h3 class="b-text">Sistema ND Box</h3>
+<p class="b-text">Associação Notre Dame</p>
+
+{% endblock %}

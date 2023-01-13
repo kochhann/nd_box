@@ -1,0 +1,44 @@
+{% extends 'email/base_email.html' %}
+{% block content %}
+
+<div class="fancy-title title-bottom-border">
+    <h2 class="b-text">Olá {{inscricao.nome}}!</h2>
+</div>
+<p>
+    Esta mensagem é uma confirmação da sua inscrição para o evento {{evento.nome}}!
+</p>
+<br>
+<p class="b-text">Informações Gerais</p>
+<ul>
+    <li class="b-text">Evento: {{evento.nome}}</li>
+    <li class="b-text">Data início: {{evento.data_evento}}</li>
+    <li class="b-text">Data término: {{evento.data_termino}}</li>
+    <li class="b-text">Local: {{evento.local_evento}}</li>
+</ul>
+<br>
+{% if inscricao.age > 17 %}
+<p class="b-text">
+    Já recebemos a sua inscrição, mas para você poder aproveitar todos os momentos, você vai receber em alguns
+    instantes outra mensagem nossa, solicitando mais algumas informações.
+</p>
+{% else %}
+<p class="b-text">
+    Já recebemos a sua inscrição, mas para você poder aproveitar todos os momentos, enviamos um e-mail para
+    {{inscricao.email_responsavel}}, solicitando mais algumas informações.
+</p>
+{% endif %}
+<br>
+<p class="b-text">
+    Caso não reconheça o conteúdo desta mensagem, encaminhe este e-mail para dpo@nd.org.br.
+</p>
+<br>
+<p class="b-text">
+    Esta é uma mensagem automática, não responda. Para mais informações, envie mensagem para tecnologia@nd.org.br
+</p>
+
+<br>
+<br>
+<h3 class="b-text">Serviço de Animação Vocacional - JUND</h3>
+<p class="b-text">Associação Notre Dame</p>
+
+{% endblock %}

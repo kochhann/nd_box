@@ -1,0 +1,30 @@
+{% extends 'login_index.html' %}
+{% block form %}
+<form class="clearfix" method="post" class="mb-0">
+{% csrf_token %}
+{{ form.non_field_errors }}
+    <h3 style="color: #172a60;">Acesse a área protegida</h3>
+    <div class="row">
+        <div class="col-12 form-group">
+            <label for="id_username">Email:</label>
+            <input class="form-control" type="text" name="username" autofocus autocapitalize="none" autocomplete="off" maxlength="150" required id="id_username">
+            {{ form.username.errors }}
+        </div>
+
+        <div class="col-12 form-group">
+            <label for="id_password" class="capitalize t600">Password:</label>
+            <div class="input-group toggle-password" data-icon-off="icon-line-unlock" data-icon-on="icon-line-lock">
+                <input type="password" class="form-control" name="password" autocomplete="current-password" required id="id_password">
+                <button class="btn border-start-0 btn-outline-secondary icon-line-lock btn-password-toggle" type="button" style="border-color: #ced4da"></button>
+            </div>
+            {{ form.password.errors }}
+        </div>
+        <div class="form-group">
+            <button class="button button-border button-rounded button-blue m-0" id="login-form-submit" name="login-form-submit" value="submit">Login</button>
+        </div>
+    </div>
+
+</form>
+<h5><a href="{% url 'registrar' %}" style="color: #172a60;">Não tem cadastro?</a></h5>
+<h5><a href="{% url 'password-reset' %}" style="color: #172a60;">Esqueceu a senha?</a></h5>
+{% endblock %}

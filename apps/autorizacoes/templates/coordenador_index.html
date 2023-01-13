@@ -1,0 +1,81 @@
+{% load static %}
+<!-- Content
+============================================= -->
+
+<section id="content">
+    <div class="content-wrap">
+        <div class="container clearfix">
+            <div class="row">
+                <div class="postcontent col-lg-9">
+
+                    <a href="{% url 'evento-create' %}" class="button button-border button-rounded button-blue" disabled="disabled" style="float: right;">Novo evento</a>
+
+                    <h2>Próximos Eventos</h2>
+                    <div class="row">
+
+                        {% for evento in eventos%}
+                        <div class="entry event col-12">
+                            <div class="grid-inner row align-items-center g-0 p-4">
+                                <div class="col-sm-2 mb-md-0">
+                                    <a class="entry-image">
+                                        <div class="entry-date">{{ evento.data_evento|date:'d'}}<span>{{ evento.data_evento|date:'b'}}</span></div>
+                                    </a>
+                                </div>
+                                <div class="col-md-8 ps-md-4">
+                                    <div class="entry-title title-xs">
+                                        <h2><a href="{% url 'evento-detail' evento.evento.pk %}">{{ evento.evento.nome }}</a></h2>
+                                    </div>
+                                    <div class="entry-meta">
+                                        <ul>
+                                            <li><i class="icon-time"></i> {{ evento.data_evento }}</li>
+                                            <li><i class="icon-map-marker2"></i> {{ evento.evento.scope }}</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="entry event col-12">
+                            <div class="grid-inner row g-0 p-4">
+                                <div class="col-md-5 mb-md-0">
+                                    <h3>Sem eventos</h3>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+                <div class="w-100 line d-block d-md-none"></div>
+                <div class="col-md-3">
+                    <div class="list-group">
+                        <a href="{% url 'evento-list' %}" class="list-group-item list-group-item-action d-flex justify-content-between"><div>Eventos</div><i class="icon-calendar2"></i></a>
+                        <a href="{% url 'mensagem-list' %}" class="list-group-item list-group-item-action d-flex justify-content-between">
+                            {% if solicitacoes > 0 %}
+                            <div><strong>Mensagens</strong></div>
+                            <i class="icon-envelope1">
+                                <span class="top-cart-number">{{solicitacoes}}</span>
+                            </i>
+                            {% else %}
+                            <div><strong>Mensagens</strong></div>
+                            <i class="icon-envelope1"></i>
+                            {% endif %}
+                        </a>
+                        <a href="{% url 'logout' %}" class="list-group-item list-group-item-action d-flex justify-content-between"><div>Logout</div><i class="icon-sign-out-alt"></i></a>
+                    </div>
+                    <div class="fancy-title topmargin title-border">
+                        <h4>Reflexão</h4>
+                    </div>
+                    <blockquote class="quote" style="color: black;">
+                        <p><i>{{ quote }}</i></p>
+                        <footer class="blockquote-footer">{{ author }}</footer>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+        {% include 'new_feature_modal.html' %}
+    </div>
+</section><!-- #content end -->

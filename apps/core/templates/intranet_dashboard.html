@@ -1,0 +1,59 @@
+{% extends 'index.html' %}
+{% block dashboard %}
+
+<div class="row">
+
+	<!-- Column 1 -->
+	<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+		<div class="content-right">
+
+			<!-- Item 1 -->
+			<div class="box-item wow fadeInRight" data-wow-delay="0.3s">
+				<span class="icon">
+					<i class="icon-lock2"></i>
+				</span>
+				<div class="text">
+					<h4><a href="{% url 'privacidade' %}" target="_self" style="color: #172a60;">Portal de Privacidade</a></h4>
+				</div>
+			</div><!-- #item end -->
+
+		</div>
+	</div><!-- #column end -->
+
+	<!-- Column 2 -->
+	<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+		<div class="content-right">
+
+			<!-- Item 1 -->
+			<div class="box-item wow fadeInRight" data-wow-delay="0.5s">
+				<span class="icon">
+					<i class="icon-line2-rocket"></i>
+				</span>
+				<div class="text">
+					<h4><a href="{% url 'carreiras' %}" target="_self" style="color: #172a60;">Portal de Carreiras</a></h4>
+				</div>
+			</div><!-- #item end -->
+
+		</div>
+	</div><!-- #column end -->
+
+	<!-- Column 3 -->
+	<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+		<div class="content-right">
+
+			<!-- Item 1 -->
+			<div class="box-item wow fadeInRight" data-wow-delay="0.7s">
+				<span class="icon">
+					<i class="icon-line2-docs"></i>
+				</span>
+				<div class="text">
+					<h4><a href="{% url 'privacidade' %}" target="_self" style="color: #172a60;">Documentos</a></h4>
+				</div>
+			</div><!-- #item end -->
+
+		</div>
+	</div><!-- #column end -->
+
+</div><!-- #row end -->
+
+{% endblock %}

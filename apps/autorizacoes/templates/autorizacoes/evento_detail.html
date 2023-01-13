@@ -1,0 +1,101 @@
+{% extends 'coordenador_base.html' %}
+{% block coord %}
+<div class="heading-block fancy-title nobottomborder">
+    <table class="table" style="table-layout: auto;">
+        <tr>
+            <td width="60%"><h4>{{object.nome}}{% if object.is_canceled %} - Cancelado em {{object.data_cancelamento}} {% endif %}</h4></td>
+            <td align="right">
+                {% if not object.is_past_due and not object.is_canceled and not object.has_documents %}
+                <a type="button" class="button button-small button-border button-rounded button-blue"
+                href="{% url 'autorizacao-gerar' object.pk %}">
+                    Gerar Autorizações
+                </a>
+                    {% if not object.has_scheduled_docs %}
+                    <a type="button" class="button button-small button-border button-rounded button-blue"
+                    href="{% url 'evento-update' object.pk %}">
+                        Alterar
+                    </a>
+                    {% endif %}
+                {% else %}
+                <a type="button" class="button button-small button-border button-rounded button-blue"
+                href="{% url 'autorizacao-list' object.pk %}">
+                    Autorizações
+                </a>
+                    {% if not object.is_canceled and not object.is_past_due%}
+                    <a type="button" class="button button-small button-border button-rounded button-black"
+                    href="{% url 'evento-cancel' object.pk %}">
+                        Cancelar Evento
+                    </a>
+                    {% endif %}
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="ps-md-4">
+    <div class="entry-meta">
+        <ul>
+            <li><i class="icon-line2-docs"></i>{{ autorizacoes }} Autor. Geradas</li>
+            <li><i class="icon-user-check"></i>{{ aceitas }} Aceitas</li>
+            <li><i class="icon-user-slash"></i>{{ negadas }} Negadas ou Pendentes</li>
+        </ul>
+    </div>
+    <div class="divider" style="margin: 1rem auto;"></div>
+    <div class="table-responsive">
+        <table class="table">
+            <col width="20%">
+            <col width="80%">
+            <tbody>
+                <tr>
+                    <td><b>Quando</b></td>
+                    {% if object.data_evento != object.data_termino %}
+                        {% if object.data_evento|date:'m' != object.data_termino|date:'m' %}
+                        <td>{{object.data_evento|date:'d'}} de {{object.data_evento|date:'M'}} à {{object.data_termino}}</td>
+                        {% else %}
+                        <td>{{object.data_evento|date:'d'}} à {{object.data_termino}}</td>
+                        {% endif %}
+                    {% else %}
+                    <td>{{object.data_evento}}</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td><b>Quem</b></td>
+                    <td>{{object.scope}}</td>
+                </tr>
+                <tr>
+                    <td><b>Onde</b></td>
+                    <td>{{object.local_evento}}</td>
+                </tr>
+                <tr>
+                    {% if t_autorizacoes|length > 1 %}
+                    <td><b>Autorizações Necessárias</b></td>
+                    <td>
+                        {% for tipo in t_autorizacoes %}
+                        <p style="margin-bottom: 0px;"><i class="icon-line2-docs"></i>&nbsp;&nbsp;&nbsp;{{ tipo.tipo_autorizacao.nome }}
+                        {% endfor %}
+                    </td>
+                    {% else %}
+                    <td><b>Autorização Necessária</b></td>
+                    <td>
+                        {% for tipo in t_autorizacoes %}
+                        <p style="margin-bottom: 0px;"><i class="icon-line2-docs"></i>&nbsp;&nbsp;&nbsp;{{ tipo.tipo_autorizacao.nome }}
+                        {% endfor %}
+                    </td>
+                    {% endif %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <p>
+        {{ object.descricao }}
+    </p>
+    {% if object.is_canceled %}
+    <h5>Motivo do cancelamento:</h5>
+    <p>
+        {{ object.obs_cancelamento }}
+    </p>
+    {% endif %}
+
+</div>
+
+{% endblock %}

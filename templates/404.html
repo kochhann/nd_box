@@ -1,0 +1,146 @@
+{% load static %}
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700|Poppins:300,400,500,600,700|PT+Serif:400,400i&display=swap"
+          rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/dark.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/font-icons.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/magnific-popup.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/bs-filestyle.css' %}" rel="stylesheet" type="text/css" />
+
+    <style>
+        .just-text {
+            text-align: justify;
+            text-justify: inter-word;
+        }
+        label {
+            color: #172A60;
+        }
+
+    </style>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="icon" type="image/png" href="{% static 'favicon-16x16.png' %}" sizes="16x16">
+    <link rel="icon" type="image/png" href="{% static 'favicon-32x32.png' %}" sizes="32x32">
+
+
+	<!-- Document Title
+	============================================= -->
+	<title>ND Box | Página não encontrada</title>
+</head>
+<body class="stretched">
+
+    <!-- Document Wrapper
+	============================================= -->
+    <div id="wrapper" class="clearfix">
+
+        <!-- Top Bar
+		============================================= -->
+		<div id="top-bar">
+			<div class="container clearfix">
+                <span class="navbar-brand">ND Box | Página não encontrada</span>
+				<div class="row justify-content-between" style="float: right;">
+					<div class="col-12 col-md-auto">
+
+						<!-- Top Social
+						============================================= -->
+						<ul id="top-social">
+                            {% if top_app_name != 'Switch' %}
+                                <li><a href="#" onclick="history.back();" class="si-openid"><span class="ts-icon"><i class="icon-backward"></i></span><span class="ts-text">Voltar</span></a></li>
+                            {% endif %}
+                            <li><a href="{% url 'index' %}" target="_self" class="si-digg"><span class="ts-icon"><i class="icon-map-marker-alt"></i></span><span class="ts-text">Home</span></a></li>
+                            <li><a href="https://www.nd.org.br" target="_blank" class="si-podcast"><span class="ts-icon"><i class="icon-school"></i></span><span class="ts-text">Site ND</span></a></li>
+							<li><a href="https://www.facebook.com/redenotredame" target="_blank" class="si-facebook"><span class="ts-icon"><i class="icon-facebook"></i></span><span class="ts-text">Facebook</span></a></li>
+							<li><a href="https://www.instagram.com/redenotredame" target="_blank" class="si-instagram"><span class="ts-icon"><i class="icon-instagram2"></i></span><span class="ts-text">Instagram</span></a></li>
+							<li><a href="https://www.google.com/accounts/Login" target="_blank" class="si-email3"><span class="ts-icon"><i class="icon-email3"></i></span><span class="ts-text">Webmail</span></a></li>
+                            {% if not user.is_anonymous %}
+                                <li><a href="#" target="_self" class="si-twitter"><span class="ts-icon"><i class="icon-user-alt"></i></span><span class="ts-text">{{user.get_full_name}}</span></a></li>
+                                <li><a href="{% url 'logout' %}" target="_self" class="si-youtube"><span class="ts-icon"><i class="icon-sign-out-alt"></i></span><span class="ts-text">Sair</span></a></li>
+                            {% else %}
+                                <li><a href="{% url 'login' %}" target="_self" class="si-evernote"><span class="ts-icon"><i class="icon-sign-in-alt"></i></span><span class="ts-text">Entrar</span></a></li>
+                            {% endif %}
+                            {% if user.is_superuser %}
+                                <li><a href="{% url 'admin:index' %}" target="_self" class="si-digg"><span class="ts-icon"><i class="icon-cog"></i></span><span class="ts-text">Gerenciamento</span></a></li>
+                            {% endif %}
+						</ul><!-- #top-social end -->
+
+					</div>
+
+				</div>
+
+			</div>
+		</div><!-- #top-bar end -->
+
+        <!-- Page Title
+        ============================================= -->
+        <section id="page-title" class="page-title-center" style="">
+
+            <div class="container clearfix">
+                <img src="{% static 'images/notre-dame.png' %}" alt="" style="padding: 20px;">
+
+                <h1>Página não encontrada</h1>
+                <span></span>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="https://www.nd.org.br">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">404</li>
+                </ol>
+            </div>
+
+        </section><!-- #page-title end -->
+
+        <!-- Content
+		============================================= -->
+		<section id="content">
+			<div class="content-wrap">
+				<div class="container clearfix">
+
+					<div class="row align-items-center col-mb-80">
+
+						<div class="col-lg-6">
+							<div class="error404 center">404</div>
+						</div>
+
+						<div class="col-lg-6">
+
+							<div class="heading-block text-center text-lg-start border-bottom-0">
+								<h4>Ooopps.! A página que você pesquisou não existe, ou não pode ser carregada.</h4>
+								<span>Tente verificar o link novamente. Para retornar à página inicial, clique no botão
+									abaixo</span>
+							</div>
+
+							 <a href="{% url 'index' %}" class="button button-border button-rounded button-blue m-0" id="404-home" name="404-home" value="">Home</a>
+
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</section><!-- #content end -->
+
+
+
+    </div><!-- #wrapper end -->
+
+    <!-- Go To Top
+	============================================= -->
+	<div id="gotoTop" class="icon-angle-up"></div>
+
+
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script src="{% static 'js/functions.js' %}"></script>
+    <script src="{% static 'js/wow.js' %}"></script>
+    <script src="{% static 'js/jquery.nav.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/bs-filestyle.js' %}"></script>
+    <script src="{% static 'js/ajax.js' %}"></script>
+
+</body>
+</html>

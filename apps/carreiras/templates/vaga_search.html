@@ -1,0 +1,47 @@
+{% extends 'carreiras_base.html' %}
+{% block carreiras %}
+<div class="heading-block fancy-title nobottomborder">
+    <table class="table">
+        <tr>
+            <td width="90%"><h4>Buscar Vagas</h4></td>
+            <td align="right"><a href="{% url 'index' %}" class="button button-border button-rounded button-red" disabled="disabled">Cancelar</a></td>
+        </tr>
+    </table>
+</div>
+
+<!-- Content
+============================================= -->
+<section id="content">
+    <div class="content-wrap" style="padding: 20px 0;">
+        <div class="container clearfix">
+
+            <div class="table-responsive">
+                <table id="datatable1" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Office</th>
+                            <th>Age</th>
+                            <th>Start date</th>
+                            <th>Salary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Tiger Nixon</td>
+                            <td>System Architect</td>
+                            <td>Edinburgh</td>
+                            <td>61</td>
+                            <td>2011/04/25</td>
+                            <td>$320,800</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</section><!-- #content end -->
+
+{% endblock %}

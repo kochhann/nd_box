@@ -1,0 +1,71 @@
+{% extends 'carreiras_base.html' %}
+{% block carreiras %}
+<div class="heading-block fancy-title nobottomborder">
+    <table class="table" style="table-layout: auto;">
+        <tr>
+            <td width="60%"><h4>{{ object.nome }}</h4></td>
+            <td align="right">
+            <td align="right"><a href="#" onclick="history.back();" class="button button-border button-rounded button-black">
+                Voltar</a>
+            </td>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="ps-md-4">
+    <div class="divider" style="margin: 1rem auto;"></div>
+    <div class="table-responsive">
+        <table class="table">
+            <col width="20%">
+            <col width="80%">
+            <tbody>
+                <tr>
+                    <td><b>Nome</b></td>
+                    <td>{{object.nome}}</td>
+                </tr>
+                <tr>
+                    <td><b>Vaga</b></td>
+                    <td>{{object.cod_vaga}}</td>
+                </tr>
+                <tr>
+                    <td><b>Escolaridade</b></td>
+                    <td>{{object.escolaridade}}</td>
+                </tr>
+                <tr>
+                    <td><b>Tempo de experiência</b></td>
+                    <td>{{object.tempo_experiencia}}</td>
+                </tr>
+                <tr>
+                    <td><b>E-mail</b></td>
+                    <td>{{object.email}}</td>
+                </tr>
+                <tr>
+                    <td><b>Telefone</b></td>
+                    <td>{{object.telefone}}</td>
+                </tr>
+                <tr>
+                    <td><b>Curriculo</b></td>
+                    <td><a href="{{ object.arquivo.url }}" target="_blank">Currículo</a></td>
+                </tr>
+                <tr>
+                    <td><b>Formação</b></td>
+                    <td>{{object.escolaridade}}
+                        {% if object.curso != none %} - {{object.curso}} {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Histórico</b></td>
+                    <td>{{object.historico}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <p>
+        {{ object.descricao }}
+    </p>
+    {% include 'vaga_deletion_modal.html' %}
+
+</div>
+
+{% endblock %}

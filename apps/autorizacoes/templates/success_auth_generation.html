@@ -1,0 +1,15 @@
+{% extends 'login_index.html' %}
+{% block form %}
+<p>
+    {{p_message}}
+</p>
+<div>
+    {% if tipo == "success" %}
+        <a href="{% url 'autorizacao-list' %}" class="button button-border button-rounded button-blue m-0">Ver autorizações</a>
+    {% elif tipo == "scheduled" %}
+        <a href="#" onclick="history.back();" class="button button-border button-rounded button-blue m-0">Voltar</a>
+    {% elif tipo == "aut" %}
+        <a href="{% url 'index' %}" class="button button-border button-rounded button-blue m-0">Home</a>
+    {% endif %}
+</div>
+{% endblock %}

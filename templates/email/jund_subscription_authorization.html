@@ -1,0 +1,43 @@
+{% extends 'email/base_email.html' %}
+{% block content %}
+
+<div class="fancy-title title-bottom-border">
+    <h2 class="b-text">Olá {{inscricao.nome_responsavel}}!</h2>
+</div>
+<p>
+    Você está recebendo esta mensagem por que é a pessoa responsável por {{inscricao.nome}}, que está inscrita
+    no evento {{evento.nome}}!
+</p>
+<p>
+    Leia com atenção os parágrafos abaixo, e, se você concordar com tudo, apenas responda essa mensagem escrevendo
+    CONCORDO! Se você NÃO responder a essa mensagem, entenderemos que você não concorda com estes termos.
+</p>
+<br>
+
+<h4>{{autorizacao.nome}}</h4>
+<p align="justify">
+    {{autorizacao.texto|linebreaks}}
+</p>
+<p class="b-text">Informações do evento</p>
+<ul>
+    <li class="b-text">Evento: {{evento.nome}}</li>
+    <li class="b-text">Data início: {{evento.data_evento}}</li>
+    <li class="b-text">Data término: {{evento.data_termino}}</li>
+    <li class="b-text">Local: {{evento.local_evento}}</li>
+</ul>
+<p class="b-text">Informações do responsável</p>
+<ul>
+    <li class="list-group-item">Nome: {{inscricao.nome_responsavel}}</li>
+    <li class="list-group-item">CPF: {{inscricao.cpf_responsavel}}</li>
+    <li class="list-group-item">Autorizando: {{inscricao.nome}}</li>
+</ul>
+<br>
+
+<p class="b-text">
+    Caso não reconheça o conteúdo desta mensagem, encaminhe este e-mail para dpo@nd.org.br.
+</p>
+<br>
+<h3 class="b-text">Serviço de Animação Vocacional - JUND</h3>
+<p class="b-text">Associação Notre Dame</p>
+
+{% endblock %}

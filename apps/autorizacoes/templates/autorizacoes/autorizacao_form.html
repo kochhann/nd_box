@@ -1,0 +1,60 @@
+{% extends 'autorizador_base.html' %}
+{% block autorizador %}
+<div class="heading-block fancy-title nobottomborder">
+    <table class="table">
+        <tr>
+            <td width="90%"><h4>Nova Solicitação</h4> - {{tipo.nome}}</td>
+            <td align="right"><a href="{% url 'index' %}" class="button button-border button-rounded button-red" disabled="disabled">Cancelar</a></td>
+        </tr>
+    </table>
+</div>
+
+<div class="container mw-md">
+    <!-- Form Solicitação -->
+    <div class="col-lg-12 pl-lg-5 just-text">
+        <form class="row" id="form-solicitacao" method="post" action="#" enctype="multipart/form-data">
+        {{ form.non_field_errors }}
+        {% csrf_token %}
+            <input type="hidden" name="tipo" value={{tipo.pk}} />
+            <div class="form-process">
+                <div class="css3-spinner">
+                    <div class="css3-spinner-scaler"></div>
+                </div>
+            </div>
+            <div class="col-12 form-group">
+                <select name="aluno" class="form-select" id="id_aluno">
+                    <option value="" selected>-- Aluno --</option>
+                    {% for item in dependentes %}
+                    <option value="{{item.pk}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-12 bottommargin-sm">
+                <div class="input-daterange component-datepicker input-group">
+                    <input type="text" name="data_evento" value="" class="form-control text-start" placeholder="Selecione a data">
+                    <div class="input-group-text">à</div>
+                    <input type="text" name="data_termino" value="" class="form-control text-start" placeholder="Selecione a data">
+                </div>
+            </div>
+            <div class="col-12 form-group">
+                <textarea name="descricao" id="solicitacao-descricao" class="form-control" cols="30" rows="5"
+                          maxlength="1000" minlength="20"
+                style="resize: none;" placeholder="Motivo da solicitação (mínimo de 20 caracteres)" onkeyup="countChar(this)" required></textarea>
+                <div id="charNum">1000</div>
+            </div>
+
+            <div class="divider" style="margin: 1rem;"></div>
+            <div class="col-12 d-none">
+                <input type="text" id="solicitacao-botcheck" name="solicitacao-botcheck" value="" />
+            </div>
+            <div class="col-12">
+                <button type="submit" name="solicitacao-submit" id="solicitacao-submit" class="button button-border button-rounded button-blue">Enviar</button>
+            </div>
+            <input type="hidden" name="prefix" value="solicitacao-" />
+
+        </form>
+    </div>
+    <div class="w-100 line d-block d-md-none"></div>
+</div>
+
+{% endblock %}

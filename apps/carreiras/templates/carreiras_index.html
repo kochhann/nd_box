@@ -1,0 +1,73 @@
+{% load static %}
+<!-- Content
+============================================= -->
+<section id="content">
+    <div class="content-wrap">
+        <div class="container clearfix">
+
+            <div class="row">
+                <div class="postcontent col-lg-9">
+
+                    <a href="{% url 'vaga-create' %}" class="button button-border button-rounded button-blue" disabled="disabled" style="float: right;">Nova vaga</a>
+
+                    <h2>Últimas Vagas Abertas</h2>
+                    <div class="row">
+
+                        {% for vaga in vagas %}
+                        <div class="entry event col-12" style="margin-bottom:10px">
+                            <div class="grid-inner row align-items-center g-0 p-4">
+                                <div class="col-md-8 ps-md-4">
+                                    <div class="entry-title title-xs">
+                                        <h2><a href="{% url 'vaga-detail' vaga.pk %}">{{ vaga.titulo }} - {{ vaga.cod_vaga }}</a></h2>
+                                    </div>
+                                    <div class="entry-meta">
+                                        <ul>
+                                            <li><i class="icon-line-tool"></i> {{ vaga.area_interesse }}</li>
+                                            <li><i class="icon-map-marker2"></i> {{ vaga.unidade }}</li>
+                                            <li><i class="icon-line2-puzzle"></i> {{ vaga.nbr_applications }}</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+
+                        <div class="entry event col-12">
+                            <div class="grid-inner row g-0 p-4">
+                                <div class="col-md-5 mb-md-0">
+                                    <h3>Sem vagas abertas</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+                <div class="w-100 line d-block d-md-none"></div>
+                <div class="col-md-3">
+                    <div class="list-group">
+                        <a href="{% url 'vaga-list' %}" class="list-group-item list-group-item-action d-flex justify-content-between"><div>Vagas</div><i class="icon-handshake"></i></a>
+                        <a href="{% url 'aplicacoes-list' %}" class="list-group-item list-group-item-action d-flex justify-content-between"><div>Candidaturas</div><i class="icon-child"></i></a>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#modal_new_feature"
+                           class="list-group-item list-group-item-action d-flex justify-content-between" title="Em breve!">
+                            <div>Mensagens</div><i class="icon-envelope1"></i>
+                        </a>
+                        <a href="{% url 'logout' %}" class="list-group-item list-group-item-action d-flex justify-content-between"><div>Logout</div><i class="icon-sign-out-alt"></i></a>
+                    </div>
+                    <div class="fancy-title topmargin title-border">
+                        <h4>Reflexão</h4>
+                    </div>
+                    <blockquote class="quote" style="color: black;">
+                        <p><i>{{ quote }}</i></p>
+                        <footer class="blockquote-footer">{{ author }}</footer>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+        {% include 'new_feature_modal.html' %}
+    </div>
+</section><!-- #content end -->

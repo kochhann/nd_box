@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+        <!-- Content
+		============================================= -->
+		<section id="content">
+			<div class="content-wrap">
+				<div class="container clearfix">
+					<div class="card mb-0 mx-auto clearfix" style="max-width: 500px;">
+						<div class="card-body" style="padding: 40px;">
+							{% block form %} {% endblock %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</section><!-- #content end -->
+
+{% endblock %}

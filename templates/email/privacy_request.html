@@ -1,0 +1,29 @@
+{% extends 'email/base_email.html' %}
+{% block content %}
+
+<div class="fancy-title title-bottom-border">
+    <h2 class="b-text">Solicitação de informações pelo sistema ND BOX | Privacidade</h2>
+</div>
+<br>
+<p class="b-text">Informações da solicitação</p>
+<ul>
+    <li class="b-text">Nome: {{name}}</li>
+    <li class="b-text">E-mail: {{email}}</li>
+    <li class="b-text">Mensagem: {{message}}</li>
+</ul>
+<br>
+<p class="b-text">
+    Esta é uma mensagem automática, não responda. Para mais informações, envie mensagem para tecnologia@nd.org.br
+</p>
+<br>
+<p class="b-text">
+    Responda a essa solicitação o mais breve possível, enviando as informações solicitadas para o
+    endereço eletrônico {{email}}
+</p>
+<br>
+<br>
+<br>
+<h3 class="b-text">Sistema ND Box</h3>
+<p class="b-text">Associação Notre Dame</p>
+
+{% endblock %}

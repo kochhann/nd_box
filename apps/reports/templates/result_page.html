@@ -1,0 +1,56 @@
+{% load static %}
+<section id="features" class="section-padding" style="padding: 5px;">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="box-item wow fadeInLeft" data-wow-delay="0.3s">
+					<blockquote class="quote" style="color: black;">
+						<p><i>{{ quote }}</i></p>
+						<footer class="blockquote-footer">{{ author }}</footer>
+					</blockquote>
+				</div>
+			</div>
+		</div>
+		<div class="divider divider-lite"></div>
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<p><i class="icon-caret-right1 mr-2"></i><b> Ano: </b>{{sql_data.0.ANO}}</p>
+				<p><i class="icon-caret-right1 mr-2"></i><b> Comunidade: </b>{{sql_data.0.NOMECASA}}</p>
+				<p><i class="icon-caret-right1 mr-2"></i><b> Cidade: </b>{{sql_data.0.CIDADECASA}}</p>
+				<p><i class="icon-caret-right1 mr-2"></i><b> Sumário: </b>{{sql_data.0.SUMARIO1}}</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="content-right">
+					<div class="fancy-title title-border">
+            			<h3>Imprimir</h3>
+					</div>
+					<div class="row justify-content-center col-mb-50 mb-0">
+						<div class="col-sm-6 col-lg-4">
+							<div class="feature-box fbox-center fbox-bg fbox-light fbox-effect">
+								<div class="fbox-icon">
+									<a href="{% url 'print_cover' sql_data.0.IDCASA sql_data.0.ANO %}" target="_blank"><i class="icon-line2-notebook i-alt " style="background-color:#8282f5"></i></a>
+								</div>
+								<div class="fbox-content">
+									<h3>Capa</h3>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-6 col-lg-4">
+							<div class="feature-box fbox-center fbox-bg fbox-light fbox-effect">
+								<div class="fbox-icon">
+									<a href="{% url 'print_statistics' id_annals sql_data.0.IDCASA sql_data.0.ANO %}" target="_blank"><i class="icon-chart-bar1 i-alt" style="background-color:#8282f5"></i></a>
+								</div>
+								<div class="fbox-content">
+									<h3>Estatística e Narrativa</h3>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

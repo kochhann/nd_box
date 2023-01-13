@@ -1,0 +1,33 @@
+<form class="row" id="mail-form" action="#" method="POST">
+{% csrf_token %}
+    <div class="form-process">
+        <div class="css3-spinner">
+            <div class="css3-spinner-scaler"></div>
+        </div>
+    </div>
+    <div class="col-6 form-group">
+        <input type="text" name="name" maxlength="100" class="form-control" placeholder="Nome" required id="id_name">
+    </div>
+    <div class="col-6 form-group">
+        <input type="email" name="email" maxlength="100" class="form-control" placeholder="E-mail" required id="id_email">
+    </div>
+    <div class="col-12 form-group">
+        <select name="subject" class="form-select required" required id="id_subject">
+            <option value="" selected>-- Finalidade do contato --</option>
+            <option value="1">Acessar meus dados pessoais</option>
+            <option value="2">Receber meus dados pessoais em formato simplificado</option>
+            <option value="3">Retificar meus dados pessoais</option>
+            <option value="4">Solicitar a exclusão dos meus dados pessoais</option>
+            <option value="5">Confirmar a existência de tratamento dos meus dados pessoais</option>
+            <option value="6">Outros</option>
+        </select>
+    </div>
+    <div class="col-12 form-group">
+        <textarea name="message" class="form-control" cols="40" rows="10" required id="id_message" style="resize: none;"
+                  maxlength="200" placeholder="Sua mensagem"></textarea>
+    </div>
+    <div class="col-12">
+        <button type="submit" name="lgpd-submit" id="lgpd-submit" class="button button-border button-rounded button-blue">Enviar</button>
+    </div>
+    <input type="hidden" name="prefix" value="lgpd-">
+</form>

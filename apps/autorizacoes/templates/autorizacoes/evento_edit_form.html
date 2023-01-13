@@ -1,0 +1,105 @@
+{% extends 'coordenador_base.html' %}
+{% block coord %}
+<div class="heading-block fancy-title nobottomborder">
+    <table class="table">
+        <tr>
+            <td width="90%"><h4>Alterar Evento {{object.nome}}</h4></td>
+            <td align="right"><a href="{% url 'index' %}" class="button button-border button-rounded button-red" disabled="disabled">Cancelar</a></td>
+        </tr>
+    </table>
+</div>
+
+<div class="container mw-md">
+    <!-- Form Evento -->
+    <div class="col-lg-12 pl-lg-5 just-text">
+        <h3>Alterar evento</h3>
+
+        <form class="row" id="form-eventos" method="post" action="#" enctype="multipart/form-data">
+            {{ form.non_field_errors }}
+            {% csrf_token %}
+            <div class="form-process">
+                <div class="css3-spinner">
+                    <div class="css3-spinner-scaler"></div>
+                </div>
+            </div>
+
+            <div class="col-6 form-group">
+                <input type="text" name="nome" id="eventos-nome" class="form-control" value="{{ object.nome }}" required>
+            </div>
+
+            <div class="col-md-6 bottommargin-sm">
+                <div class="input-daterange component-datepicker input-group">
+                    <input type="text" name="data_evento" value="{{ object.data_evento|date:'d/m/Y' }}" class="form-control text-start" placeholder="">
+                    <div class="input-group-text">à</div>
+                    <input type="text" name="data_termino" value="{{ object.data_termino|date:'d/m/Y' }}" class="form-control text-start" placeholder="">
+                </div>
+            </div>
+
+            <div class="col-12 form-group">
+                <input type="text" name="local_evento" id="eventos-local" class="form-control"
+                       value="{{object.local_evento}}"
+                       required>
+            </div>
+
+            <div class="col-12 form-group">
+                <textarea name="descricao" id="eventos-descricao" class="form-control" cols="30" rows="5"
+                          maxlength="1000" minlength="20"
+                style="resize: none;" onkeyup="countChar(this)" required>{{ object.descricao }}</textarea>
+                <div id="charNum">1000</div>
+            </div>
+
+            {% if t_autorizacoes %}
+            <div class="divider divider-lite">Autorizações Incluídas</div>
+            <div class="table-responsive">
+                <table class="table">
+                    <tbody>
+                        {% for e in t_autorizacoes %}
+                        <tr>
+                            <th>{{e.tipo_autorizacao.nome}}</th>
+                            {% if not autorizacoes %}
+                            <td>
+                                <a href="{% url 'evento-ta-delete' e.pk %}">
+                                    <i class="icon-trash"></i>
+                                </a>
+                            </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            {% if autorizacoes_disponiveis %}
+            <div class="divider divider-lite">Autorizações Disponíveis</div>
+            <div class="col-12 form-group">
+                <select class="selectpicker" name="tipo_autorizacao" id="id_tipo_autorizacao" multiple>
+                    {% for item in autorizacoes_disponiveis %}
+                    <option value="{{item.pk}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            {% else %}
+            <div class="divider divider-lite">Não há Autorizações Disponíveis</div>
+            {% endif %}
+            </div>
+
+            <div class="divider" style="margin: 1rem;"></div>
+
+            <div class="col-12 d-none">
+                <input type="text" id="eventos-botcheck" name="eventos-botcheck" value="" />
+            </div>
+            <div class="col-12">
+                <button type="submit" name="eventos-submit" id="eventos-submit" class="button button-border button-rounded button-blue">Salvar</button>
+                <a href="#" class="button button-border button-rounded button-red" style="float: right;"
+                       data-bs-toggle="modal" data-bs-target="#modal_delete_evento">Excluir</a>
+            </div>
+
+            <input type="hidden" name="prefix" value="jobs-" />
+        </form>
+    </div>
+
+    {% include 'evento_deletion_modal.html' %}
+
+</div>
+
+{% endblock %}

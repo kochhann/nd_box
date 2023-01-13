@@ -1,0 +1,119 @@
+{% extends 'coordenador_base.html' %}
+{% block coord %}
+<div class="heading-block fancy-title nobottomborder">
+    <table class="table">
+        <tr>
+            <td width="90%"><h4>Novo Evento</h4></td>
+            <td align="right"><a href="{% url 'index' %}" class="button button-border button-rounded button-red" disabled="disabled">Cancelar</a></td>
+        </tr>
+    </table>
+</div>
+
+<div class="container mw-md">
+    <!-- Form Evento -->
+    <div class="col-lg-12 pl-lg-5 just-text">
+        <form class="row" id="form-eventos" method="post" action="#" enctype="multipart/form-data">
+        {{ form.non_field_errors }}
+        {% csrf_token %}
+            <div class="form-process">
+                <div class="css3-spinner">
+                    <div class="css3-spinner-scaler"></div>
+                </div>
+            </div>
+            <input type="hidden" name="gerador" value=1 />
+            <div class="col-6 form-group">
+                <input type="text" name="nome" id="eventos-nome" class="form-control" value="" placeholder="Nome do Evento" required>
+            </div>
+            <div class="col-md-6 bottommargin-sm">
+                <div class="input-daterange component-datepicker input-group">
+                    <input type="text" name="data_evento" value="" class="form-control text-start" placeholder="Selecione a data">
+                    <div class="input-group-text">à</div>
+                    <input type="text" name="data_termino" value="" class="form-control text-start" placeholder="Selecione a data">
+                </div>
+            </div>
+            <div class="col-12 form-group">
+                <input type="text" name="local_evento" id="eventos-local" class="form-control"
+                       value="{{coordenador.unidade}} - {{coordenador.unidade.cidade}}/{{coordenador.unidade.estado}}"
+                       required>
+            </div>
+            <div class="col-12 form-group">
+                <textarea name="descricao" id="eventos-descricao" class="form-control" cols="30" rows="5"
+                          maxlength="1000" minlength="20"
+                style="resize: none;" placeholder="Descrição (mínimo de 20 caracteres)" onkeyup="countChar(this)" required></textarea>
+                <div id="charNum">1000</div>
+            </div>
+
+            <div class="divider divider-lite">Escopo do evento</div>
+            {% if form.errors %}
+            <div class="alert alert-danger" style="padding-bottom:0;"></i>{{ form.aluno.errors }}</div>
+            {% endif %}
+
+            <div class="col-6 form-group">
+                <select name="aluno" class="form-select" id="id_aluno">
+                    <option value="" selected>-- Aluno --</option>
+                    {% for item in alunos %}
+                    <option value="{{item.pk}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-6 form-group">
+                <select name="turma" class="form-select" id="id_turma">
+                    <option value="" selected>-- Turma --</option>
+                    {% for item in turmas %}
+                    <option value="{{item.pk}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-6 form-group">
+                <select name="ciclo" class="form-select" id="id_ciclo">
+                    <option value="" selected>-- Ciclo --</option>
+                    {% for item in ciclos %}
+                    <option value="{{item.pk}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-6 form-group">
+                <select name="curso" class="form-select" id="id_curso">
+                    <option value="" selected>-- Curso --</option>
+                    {% for item in cursos %}
+                    <option value="{{item.pk}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-6 form-group">
+                <select name="unidade" class="form-select" id="id_unidade">
+                    <option value="" selected>-- Unidade --</option>
+                    {% for item in unidades %}
+                    <option value="{{item.pk}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="divider divider-lite">Autorizações Necessárias</div>
+            <div class="col-12 form-group">
+                <select style="border-color: red;" class="selectpicker" name="tipo_autorizacao" required id="id_tipo_autorizacao" multiple>
+                    {% for item in t_autorizacoes %}
+                    <option value="{{item.pk}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="divider" style="margin: 1rem;"></div>
+            <div class="col-12 d-none">
+                <input type="text" id="eventos-botcheck" name="eventos-botcheck" value="" />
+            </div>
+            <div class="col-12">
+                <button type="submit" name="eventos-submit" id="eventos-submit" class="button button-border button-rounded button-blue">Salvar</button>
+            </div>
+            <input type="hidden" name="prefix" value="eventos-" />
+
+        </form>
+    </div>
+    <div class="w-100 line d-block d-md-none"></div>
+</div>
+
+{% endblock %}

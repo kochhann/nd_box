@@ -1,0 +1,64 @@
+{% extends 'coordenador_base.html' %}
+{% block coord %}
+<div class="heading-block fancy-title nobottomborder">
+    <table class="table">
+        <tr>
+            <td width="90%"><h4>Cancelar Evento {{object.nome}}</h4></td>
+            <td align="right"><a href="{% url 'evento-detail' object.pk %}" class="button button-border button-rounded button-red" disabled="disabled">Cancelar</a></td>
+        </tr>
+    </table>
+</div>
+<div class="container mw-md">
+    <ul class="list-group">
+        <li class="list-group-item">
+            Autorizações geradas
+            <span class="badge bg-secondary float-end" style="margin-top: 3px;">{{autorizacoes}}</span>
+        </li>
+        <li class="list-group-item">
+            Autorizações aceitas
+            <span class="badge bg-secondary float-end" style="margin-top: 3px;">{{aceitas}}</span>
+        </li>
+        <li class="list-group-item">
+            Autorizações negadas ou pendentes
+            <span class="badge bg-secondary float-end" style="margin-top: 3px;">{{negadas}}</span>
+        </li>
+    </ul>
+    <p>Estas autorizações serão canceladas também, e os responsáveis serão notificados por e-mail.</p>
+    <div class="divider" style="margin: 1rem auto;"></div>
+    <!-- Form Evento -->
+    <div class="col-lg-12 pl-lg-5 just-text">
+       <form class="row" id="form-eventos" method="post" action="#" enctype="multipart/form-data">
+            {{ form.non_field_errors }}
+            {% csrf_token %}
+            <div class="form-process">
+                <div class="css3-spinner">
+                    <div class="css3-spinner-scaler"></div>
+                </div>
+            </div>
+
+            <div class="col-12 form-group">
+                <label for="eventos-cancelamento">Motivo do cancelamento</label>
+                <textarea name="obs_cancelamento" id="eventos-cancelamento" class="form-control" cols="30" rows="5"
+                          maxlength="1000" minlength="20"
+                style="resize: none;" onkeyup="countChar(this)" required></textarea>
+                <div id="charNum">1000</div>
+            </div>
+
+            <div class="divider" style="margin: 1rem;"></div>
+
+            <div class="col-12 d-none">
+                <input type="text" id="eventos-botcheck" name="eventos-botcheck" value="" />
+            </div>
+            <div class="col-12">
+                <button type="submit" name="eventos-submit" id="eventos-submit" class="button button-border button-rounded button-blue">Confirmar cancelamento</button>
+            </div>
+
+            <input type="hidden" name="prefix" value="jobs-" />
+        </form>
+    </div>
+
+    {% include 'evento_deletion_modal.html' %}
+
+</div>
+
+{% endblock %}

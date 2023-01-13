@@ -1,0 +1,166 @@
+<form class="row" id="form" method="post" action="#" enctype="multipart/form-data">
+  {% csrf_token %}
+    <div class="form-process">
+        <div class="css3-spinner">
+            <div class="css3-spinner-scaler"></div>
+        </div>
+    </div>
+    <div class="col-12 form-group">
+        <select name="cod_vaga" class="form-select" id="id_cod_vaga">
+            <option value="" selected>-- Vaga --</option>
+            {% for item in vagas %}
+                <option value="{{item.id}}">{{item.titulo}} - {{item.unidade}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-6 form-group">
+        <input type="text" name="{{ form.nome.name }}" id="jobs-name" class="form-control" value="" placeholder="Nome Completo" required>
+    </div>
+    <div class="col-6 form-group">
+        <input type="email" name="{{ form.email.name }}" id="jobs-mail" class="form-control" value="" placeholder="E-mail" required>
+    </div>
+    <div class="col-6 form-group">
+        <select name="cidade" class="form-select" required id="id_cidade">
+            <option value="" selected>-- Cidade --</option>
+            {% for item in cidades %}
+                <option value="{{item}}">{{item}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-6 form-group">
+        <input type="text" name="{{ form.telefone.name }}" id="jobs-phone" class="form-control" value="" placeholder="Telefone" required>
+    </div>
+    <div class="col-6 form-group">
+        <select name="escolaridade" class="form-select" required id="id_escolaridade">
+            <option value="" selected>-- Escolaridade --</option>
+            {% for item in niveis %}
+                <option value="{{item.id}}">{{item.nome}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-6 form-group">
+        <input type="text" name="{{ form.curso.name }}" id="jobs-course" class="form-control" value="" placeholder="Curso" disabled>
+    </div>
+    <div class="col-12 form-group">
+        <textarea name="{{ form.historico.name }}" id="jobs-subject" class="form-control" cols="30" rows="5" maxlength="200"
+        style="resize: none;" placeholder="Pós-graduação"></textarea>
+    </div>
+    <div class="col-6 form-group">
+        <select name="area_interesse" class="form-select" required id="id_area_interesse">
+            <option value="" selected>-- Área pretendida --</option>
+            {% for item in areas %}
+                <option value="{{item.id}}">{{item.nome}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-6 form-group">
+        <select name="unidade_interesse" class="form-select" required id="id_unidade_interesse">
+            <option value="" selected>-- Unidade de interesse --</option>
+            {% for item in unidades %}
+                <option value="{{item.id}}">{{item.nome}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-12 form-group">
+        <div class="label">
+            <label>Possui experiência na função?</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="sim">
+            <label class="form-check-label" for="inlineRadio1">Sim</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="nao">
+            <label class="form-check-label" for="inlineRadio2">Não</label>
+        </div>
+        <input type="text" name="{{ form.tempo_experiencia.name }}" id="jobs-ex-time" class="form-control" value="" placeholder="Tempo de experiência">
+    </div>
+    <div class="col-12 bottommargin">
+        <label>Adicione seu currículo. ATENÇÃO! Apenas arquivos tipo PDF:</label><br>
+        <input type="file" id="jobs-resume" name="{{ form.arquivo.name }}" class="file-loading"
+        data-allowed-file-extensions='["pdf"]' data-show-preview="false" required/>
+    </div>
+    <label>Para submeter sua inscrição, leia com atenção e marque os itens abaixo</label>
+    <div class="col-12 just-text">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="jobs-check1" name="{{ form.consentimento_1.name }}" required>
+            <label class="form-check-label" for="jobs-check1">
+                Estou ciente e dou consentimento livre à Associação Notre Dame para a utilização dos meus dados
+                pessoais e dados sensíveis, bem como que as informações prestadas serão destinadas somente para
+                minha participação em processos seletivos da instituição, conforme Lei Geral de Proteção de Dados
+                – Lei nº 13.709/2018.
+            </label>
+        </div>
+    </div>
+    <div class="divider" style="margin: 1rem;"></div>
+    <div class="col-12 just-text">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="jobs-check2" name="{{ form.consentimento_2.name }}" required>
+            <label class="form-check-label" for="jobs-check2">
+                Autorizo a Associação Notre Dame a acessar essas informações e direcionar a minha participação
+                nos processos seletivos para preenchimento de vagas com as quais eu estiver de acordo com os requisitos
+                exigidos pela instituição.
+            </label>
+        </div>
+    </div>
+    <div class="divider" style="margin: 1rem;"></div>
+    <div class="col-12 just-text">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="jobs-check3" name="{{ form.consentimento_3.name }" required>
+            <label class="form-check-label" for="jobs-check3">
+                Estou ciente que os dados informados serão descartados pela instituição após seis meses da
+                realização deste cadastro e caso seja de meu interesse, efetuarei nova inscrição para participar de processos seletivos.
+            </label>
+        </div>
+    </div>
+    <div class="divider" style="margin: 1rem;"></div>
+    <div class="col-12 d-none">
+        <input type="text" id="jobs-botcheck" name="jobs-botcheck" value="" />
+    </div>
+    <div class="col-12">
+        <button type="submit" name="jobs-submit" id="jobs-submit" class="button button-border button-rounded button-blue">Enviar</button>
+    </div>
+
+    <input type="hidden" name="prefix" value="jobs-">
+
+</form>
+<script>
+    document.getElementById("id_escolaridade").onchange =
+    function() {
+        var slctd = document.getElementById("id_escolaridade").value;
+        if(slctd > 4) {
+            document.getElementById("jobs-course").disabled = false;
+        }
+        else{
+            ipt = document.getElementById("jobs-course");
+            ipt.value = '';
+            ipt.disabled = true;
+        }
+    }
+</script>
+<script>
+    document.getElementById("id_cod_vaga").onchange =
+    function() {
+        var slctd = document.getElementById("id_cod_vaga").value;
+        if(slctd != ""){
+            document.getElementById("id_cidade").disabled = true;
+            document.getElementById("id_cidade").required = false;
+
+            document.getElementById("id_area_interesse").disabled = true;
+            document.getElementById("id_area_interesse").required = false;
+
+            document.getElementById("id_unidade_interesse").disabled = true;
+            document.getElementById("id_unidade_interesse").required = false;
+        }
+        else{
+            document.getElementById("id_cidade").disabled = false;
+            document.getElementById("id_cidade").required = true;
+
+            document.getElementById("id_area_interesse").disabled = false;
+            document.getElementById("id_area_interesse").required = true;
+
+            document.getElementById("id_unidade_interesse").disabled = false;
+            document.getElementById("id_unidade_interesse").required = true;
+        }
+    }
+</script>

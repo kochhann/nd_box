@@ -1,0 +1,117 @@
+{% extends 'jund_base.html' %}
+{% block jund %}
+<div class="heading-block fancy-title nobottomborder">
+    <table class="table">
+        <tr>
+            <td width="90%"><h4>{{evento.nome}}</h4></td>
+            <td align="right"><a href="{% url 'index' %}" class="button button-border button-rounded button-red" disabled="disabled">Cancelar</a></td>
+        </tr>
+    </table>
+</div>
+
+<div class="container mw-md">
+    <!-- Form Evento -->
+    <div class="col-lg-12 pl-lg-5 just-text">
+        <form class="row" id="form-insc_eventos-jund" method="post" action="#" enctype="multipart/form-data">
+        {{ form.non_field_errors }}
+        {% csrf_token %}
+            <div class="form-process">
+                <div class="css3-spinner">
+                    <div class="css3-spinner-scaler"></div>
+                </div>
+            </div>
+            <input type="hidden" name="gerador" value=1 />
+            <input type="hidden" name="evento_jund" value={{evento.pk}} />
+            <input type="hidden" name="id_jund" value={{id_jund_i}} />
+            <input type="hidden" name="id_grupo" value={{grupo_i}} />
+            <div class="col-12 form-group">
+                <input type="text" name="nome" id="insc_eventos-jund-nome" class="form-control" value="{{nome_i}}"
+                       placeholder="Nome completo" readonly="">
+            </div>
+            <div class="col-6 form-group">
+                <input type="text" name="cidade" id="insc_eventos-jund-cidade" class="form-control" value="{{cidade_i}}"
+                       placeholder="Cidade" readonly="">
+            </div>
+
+            <div class="col-6 form-group">
+                <input type="text" name="email" id="insc_eventos-jund-email" class="form-control" value="{{email_i}}"
+                       placeholder="E-mail" readonly="">
+                <strong style="color: red;">{{ form.email.errors }}</strong>
+            </div>
+            <div class="col-6 form-group">
+                <input type="text" name="telefone" id="insc_eventos-jund-telefone" class="form-control"
+                       value="{{celular_i}}" placeholder="Telefone" readonly="">
+                <strong style="color: red;">{{ form.telefone.errors }}</strong>
+            </div>
+            <div class="col-6 form-group">
+                <input type="text" name="nascimento" id="insc_eventos-jund-nascimento"
+                       class="form-control tleft past-enabled" value="{{nascimento_i|date:'d/m/Y'}}"
+                       placeholder="Nascimento" required readonly="">
+                <strong style="color: red;">{{ form.nascimento.errors }}</strong>
+            </div>
+            <div class="col-12 form-group">
+                <label for="insc_eventos-jund-restricoes">Se houver alguma restrição alimentar ou quanto à participação
+                    em quaisquer atividades do programa, descreva abaixo:</label>
+                <textarea name="restricoes" id="insc_eventos-jund-restricoes" class="form-control" cols="30" rows="5"
+                          maxlength="1000" style="resize: none;" onkeyup="countChar(this)"></textarea>
+                <div id="charNum">1000</div>
+            </div>
+            <h5>Para editar os dados acima, atualize o seu cadastro na área de usuário JUND.</h5>
+
+            <div class="divider divider-lite">Informações do Responsável Legal</div>
+
+            {% if idade > 17 %}
+            <div class="col-12 form-group">
+                <input type="text" name="nome_responsavel" id="insc_eventos-jund-nome_resp" class="form-control"
+                       placeholder="Nome do responsável" value="{{nome_i}}" readonly="">
+                <strong style="color: red;">{{ form.nome_responsavel.errors }}</strong>
+            </div>
+            <div class="col-6 form-group">
+                <input type="text" name="email_responsavel" id="insc_eventos-jund-email_resp" class="form-control"
+                       placeholder="E-mail do responsável" value="{{email_i}}" readonly="">
+                <strong style="color: red;">{{ form.email_responsavel.errors }}</strong>
+            </div>
+            {% else %}
+            <div class="col-12 form-group">
+                <input type="text" name="nome_responsavel" id="insc_eventos-jund-nome_resp" class="form-control"
+                       placeholder="Nome do responsável" >
+                <strong style="color: red;">{{ form.nome_responsavel.errors }}</strong>
+            </div>
+            <div class="col-6 form-group">
+                <input type="text" name="email_responsavel" id="insc_eventos-jund-email_resp" class="form-control"
+                       placeholder="E-mail do responsável" >
+                <strong style="color: red;">{{ form.email_responsavel.errors }}</strong>
+            </div>
+            {% endif %}
+
+            <div class="col-6 form-group">
+                <input type="text" name="cpf_responsavel" id="insc_eventos-jund-cpf_resp" class="cpf form-control"
+                       placeholder="CPF do responsável" required>
+                <strong style="color: red;">{{ form.cpf_responsavel.errors }}</strong>
+            </div>
+            <div class="col-12 just-text">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="insc-eventos-jund-check1"
+                           name="consentimento_1" required>
+                    <label class="form-check-label" for="insc-eventos-jund-check1">
+                        Ao submeter a sua inscrição, você concorda com o pagamento de ao menos 50% do valor do evento,
+                        ciente de que este valor NÃO será devolvido em caso de desistência.
+                    </label>
+                </div>
+            </div>
+            <div class="divider" style="margin: 1rem;"></div>
+            <div class="col-12 d-none">
+                <input type="text" id="insc_eventos-jund-botcheck" name="eventos-botcheck" value="" />
+            </div>
+            <div class="col-12">
+                <button type="submit" name="insc_eventos-jund-submit" id="insc_eventos-submit"
+                        class="button button-border button-rounded button-blue">Enviar</button>
+            </div>
+            <input type="hidden" name="prefix" value="insc_eventos-jund-" />
+
+        </form>
+    </div>
+    <div class="w-100 line d-block d-md-none"></div>
+</div>
+
+{% endblock %}

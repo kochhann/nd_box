@@ -1,0 +1,16 @@
+{% extends 'coordenador_base.html' %}
+{% block coord %}
+<div class="heading-block fancy-title nobottomborder">
+    <table class="table">
+        <tr>
+            <td width="90%"><h4>Tem certeza que deseja excluir?</h4></td>
+            <td align="right"><a href="#" onclick="history.back();" class="button button-border button-rounded button-red" disabled="disabled">Cancelar</a></td>
+        </tr>
+    </table>
+</div>
+<form method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" name="eventos-submit" id="eventos-submit" class="button button-border button-rounded button-red">Confirmar</button>
+</form>
+{% endblock %}

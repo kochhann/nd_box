@@ -1,0 +1,110 @@
+{% extends 'coordenador_base.html' %}
+{% block coord %}
+<div class="heading-block fancy-title nobottomborder">
+    <table class="table">
+        <tr>
+            <td width="90%"><h4>Autorizações - {{evento.nome}}{% if evento.is_canceled %} - Cancelado em {{evento.data_cancelamento}} {% endif %}</h4></td>
+            <td>
+                {% if autorizacoes and not evento.is_canceled %}
+                <div class="btn-group">
+                    <button type="button" class="button button-small button-border button-rounded
+                     button-blue dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Relatórios
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'autorizacao-print' 0 evento.pk %}" target="_blank">Autorizados</a>
+                        <a class="dropdown-item" href="{% url 'autorizacao-print' 1 evento.pk %}" target="_blank">Negados</a>
+                        <a class="dropdown-item" href="{% url 'autorizacao-print' 2 evento.pk %}" target="_blank">Pendentes</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'autorizacao-print' 3 evento.pk %}" target="_blank">Todas</a>
+                    </div>
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="container mw-md">
+    <div class="table-responsive">
+        <!-- Legenda -->
+        <table>
+            <tr>
+                <th>
+                    <i class="icon-file-excel1" style="padding-left: 10px;
+                                                       color: #FF6347;
+                                                       padding-right: 20px;">
+                        Evento cancelado
+                    </i>
+                </th>
+                <th>
+                    <i class="icon-forbidden" style="padding-left: 10px;
+                                                       color: #2F4F4F;
+                                                       padding-right: 20px;">
+                        Autorização revogada
+                    </i>
+                </th>
+                <th>
+                    <i class="icon-exclamation-triangle" style="padding-left: 10px;
+                                                       color: #DAA520;
+                                                       padding-right: 20px;">
+                        Autorização expirando
+                    </i>
+                </th>
+            </tr>
+        </table>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Aluno</th>
+                    <th>Evento</th>
+                    <th>Tipo</th>
+                    <th>Status</th>
+                    <th>Ver</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for auto in autorizacoes %}
+                <tr>
+                    <td><b>{{ auto.aluno.nome }}</b></td>
+                    <td>{{ auto.evento }}</td>
+                    <td>{{ auto.tipo.apelido }}</td>
+
+                    <td>
+                        {% if not auto.cancelado %}
+                            {% if auto.autorizado is not None%}
+                                {% if auto.autorizado %}
+                                    Autorizado
+                                {% else %}
+                                    Recusado
+                                {% endif %}
+                            {% else %}
+                                Pendente
+                            {% endif %}
+                        {% else %}
+                            Cancelada
+                        {% endif %}
+                        {% if auto.evento.cancelado %}
+                            <i class="icon-file-excel1" style="padding-left: 10px; color: #FF6347;"></i>
+                        {% endif %}
+                        {% if auto.revogado %}
+                            <i class="icon-forbidden" style="padding-left: 10px; color: #2F4F4F;"></i>
+                        {% endif %}
+                        {% if auto.is_about_expire %}
+                            <i class="icon-exclamation-triangle" style="padding-left: 10px; color: #DAA520;"></i>
+                        {% endif %}
+                    </td>
+
+                    <td><a href="{% url 'autorizacao-detail' auto.pk %}"><i class="icon-eye"></i></a></td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">Sem autorizações</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

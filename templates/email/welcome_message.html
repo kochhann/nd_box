@@ -1,0 +1,36 @@
+{% extends 'email/base_email.html' %}
+{% block content %}
+
+<div class="fancy-title title-bottom-border">
+    <h2 class="b-text">Confirmação de cadastro no Sistema ND Box</h2>
+</div>
+<br>
+<p class="b-text">Estamos felizes em ter você conosco!</p>
+<p class="b-text">Para acessar o sistema ND Box, <a href="https://www.webnd.com.br/nd_box/login/">CLIQUE AQUI</a></p>
+<p class="b-text">Os dados de acesso são os seguintes:</p>
+<br>
+<ul>
+    <li class="b-text">Usuario: {{responsavel.user.email}}</li>
+    <li class="b-text">Senha: {{responsavel.user.last_name}}</li>
+</ul>
+<br>
+<p class="b-text">
+    Adicionamos os seguintes alunos como seus dependentes:
+</p>
+<br>
+<ul>
+    {% for item in responsavel.aluno_set.all %}
+    <li class="b-text">{{item.nome}} - Matrícula: {{item.matricula}} - Turma: {{item.turma_atual}}</li>
+    {% endfor %}
+</ul>
+<br>
+<br>
+<p class="b-text">
+    Esta é uma mensagem automática, não responda. Para mais informações, envie uma mensagem para tecnologia@nd.org.br
+</p>
+<br>
+<br>
+<h3 class="b-text">Sistema ND Box</h3>
+<p class="b-text">Associação Notre Dame</p>
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section id="features" class="section-padding" style="padding: 5px;">
+	<div class="container">
+		{% if user.is_staff or user.is_anonymous %}
+		<div class="row">
+
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="box-item wow fadeInLeft" data-wow-delay="0.3s">
+					<blockquote class="quote" style="color: black;">
+						<p><i>{{ quote }}</i></p>
+						<footer class="blockquote-footer">{{ author }}</footer>
+					</blockquote>
+				</div>
+			</div>
+		</div>
+
+            {% block dashboard %} {% endblock %}
+
+		<div class="row">
+
+			<div class="col-lg-4" style="color: #172a60;">
+				<div class="show-box wow fadeInUp" data-wow-delay="1.2s">
+					<div class="heading-block fancy-title border-bottom-0 title-bottom-border">
+						<h4>Missão</h4>
+					</div>
+					<p>Educação sólida com valores cristãos.</p>
+				</div>
+			</div>
+
+			<div class="col-lg-4" style="color: #172a60;">
+				<div class="show-box wow fadeInUp" data-wow-delay="1.5s">
+					<div class="heading-block fancy-title border-bottom-0 title-bottom-border">
+						<h4>Visão</h4>
+					</div>
+					<p>Formar líderes para a transformação da sociedade.</p>
+				</div>
+			</div>
+
+			<div class="col-lg-4" style="color: #172a60;">
+				<div class="show-box wow fadeInUp" data-wow-delay="1.8s">
+					<div class="heading-block fancy-title border-bottom-0 title-bottom-border">
+						<h4>Valores</h4>
+					</div>
+					<p>Respeito à dignidade da pessoa como filha(o) de Deus;
+					<br>Hospitalidade como acolhida do outro e atenção aos detalhes;
+					<br>Competência profissional como dever de justiça;
+					<br>Alegre simplicidade;
+					<br>Bondade e firmeza.</p>
+				</div>
+			</div>
+
+		</div>
+		{% endif %}
+		{% if is_autorizador %}
+			{% include 'autorizador_index.html' %}
+		{% endif %}
+		{% if is_coordenador %}
+			{% include 'coordenador_index.html' %}
+		{% endif %}
+		{% if is_carreiras %}
+			{% include 'carreiras_index.html' %}
+		{% endif %}
+
+	</div>
+
+	{% include 'schools_modal.html' %}
+
+</section>
+
+
+
+{% endblock %}

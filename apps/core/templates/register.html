@@ -1,0 +1,29 @@
+{% extends 'login_index.html' %}
+{% block form %}
+<form id="register-form" name="register-form" class="row mb-0" action="#" method="post">
+    {% csrf_token %}
+
+    <div class="col-12 form-group">
+        <label for="register-name">Nome:</label>
+        <input type="text" id="register-name" name="register_name" value="" class="form-control" required/>
+    </div>
+
+    <div class="col-12 form-group">
+        <label for="register-email">E-mail:</label>
+        <input type="text" id="register-email" name="register_email" value="" class="form-control" required/>
+    </div>
+
+    <div class="col-12 form-group">
+        <label for="register-id">CPF:</label>
+        <input type="text" id="register-id" name="register_id" value="" class="form-control" oninput="cpf_mask(this)" required/>
+        <small id="idHelp" class="form-text text-muted">Digite apenas números.<br>Esta informação será utilizada validar o seu vínculo com a
+            instituição. Ela não será armazenada ou compartilhada.</small>
+    </div>
+
+    <div class="col-12 form-group">
+        <button class="button button-border button-rounded button-blue m-0" id="register-form-submit" name="register-form-submit" value="register">Registrar</button>
+    </div>
+
+</form>
+<h5><a href="{% url 'login' %}" style="color: #172a60;">Já tem cadastro?</a></h5>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'email/base_email.html' %}
+{% block content %}
+
+<p class="b-text">
+    {% if message %}
+    {{message.mensagem}}
+    {% else %}
+    Voce está recebendo esta mensagem porque um endereço para o qual você enviou uma mensagem está incorreto.
+<p class="b-text">
+    Os dados da mensagem são:
+<ul>
+    <li class="b-text">Destino: {{mail_destino}} <i>(Corrigir)</i></li>
+    <li class="b-text">Assunto: {{mail_assunto}}</li>
+    <li class="b-text">Data: {{data_geracao}}</li>
+    <li class="b-text">Origem: {{mail_remetente}}</li>
+    <li class="b-text">Usuário: {{usuario}}</li>
+</ul>
+</p>
+    {% endif %}
+</p>
+
+<br>
+<p class="b-text">
+    Caso não reconheça o conteúdo desta mensagem, encaminhe este e-mail para dpo@nd.org.br.
+</p>
+<br>
+<br>
+<h3 class="b-text">Sistema ND</h3>
+<p class="b-text">Associação Notre Dame</p>
+
+{% endblock %}

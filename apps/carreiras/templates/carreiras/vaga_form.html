@@ -1,0 +1,81 @@
+{% extends 'carreiras_base.html' %}
+{% block carreiras %}
+<div class="heading-block fancy-title nobottomborder">
+    <table class="table">
+        <tr>
+            <td width="90%"><h4>Nova Vaga</h4></td>
+            <td align="right"><a href="{% url 'index' %}" class="button button-border button-rounded button-red" disabled="disabled">Cancelar</a></td>
+        </tr>
+    </table>
+</div>
+
+<div class="container mw-md">
+    <!-- Form Vaga -->
+    <div class="col-lg-12 pl-lg-5 just-text">
+        <form class="row" id="form-vaga" method="post" action="#" enctype="multipart/form-data">
+        {{ form.non_field_errors }}
+        {% if form.errors %}
+            <div class="alert alert-danger" style="padding-bottom:0;"></i>{{ form.vaga.errors }}</div>
+        {% endif %}
+        {% csrf_token %}
+            <div class="form-process">
+                <div class="css3-spinner">
+                    <div class="css3-spinner-scaler"></div>
+                </div>
+            </div>
+            <!-- Titulo -->
+            <div class="col-6 form-group">
+                <input type="text" name="titulo" id="vagas-titulo" class="form-control" value="" placeholder="Título da Vaga" required>
+            </div>
+            <!-- Unidade -->
+            <div class="col-6 form-group">
+                <select name="unidade" class="form-select" id="unidade">
+                    <option value="" selected>-- Unidade --</option>
+                    {% for item in unidades %}
+                    <option value="{{item.pk}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <!-- Escolaridade -->
+            <div class="col-6 form-group">
+                <select name="escolaridade" class="form-select" id="escolaridade">
+                    <option value="" selected>-- Escolaridade --</option>
+                    {% for item in niveis %}
+                    <option value="{{item.pk}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <!-- Área -->
+            <div class="col-6 form-group">
+                <select name="area_interesse" class="form-select" id="area_interesse">
+                    <option value="" selected>-- Área --</option>
+                    {% for item in areas %}
+                    <option value="{{item.pk}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <!-- Tempo de exp. -->
+            <div class="col-6 form-group">
+                <input type="text" name="tempo_experiencia" id="tempo_experiencia" class="form-control" value="" placeholder="Tempo de experiência">
+            </div>
+            <!-- Descrição -->
+            <div class="col-12 form-group">
+                <textarea name="descricao" id="vaga-descricao" class="form-control" cols="30" rows="5"
+                          maxlength="1000" minlength="20"
+                style="resize: none;" placeholder="Descrição (mínimo de 20 caracteres)" onkeyup="countChar(this)" required></textarea>
+                <div id="charNum">1000</div>
+            </div>
+            <div class="col-12 d-none">
+                <input type="text" id="vaga-botcheck" name="eventos-botcheck" value="" />
+            </div>
+            <div class="col-12">
+                <button type="submit" name="vaga-submit" id="eventos-submit" class="button button-border button-rounded button-blue">Salvar</button>
+            </div>
+            <input type="hidden" name="prefix" value="vaga-" />
+
+        </form>
+    </div>
+    <div class="w-100 line d-block d-md-none"></div>
+</div>
+
+{% endblock %}

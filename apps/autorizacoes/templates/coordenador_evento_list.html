@@ -1,0 +1,130 @@
+{% extends 'coordenador_base.html' %}
+{% block coord %}
+<div class="heading-block fancy-title nobottomborder">
+    <table class="table">
+        <tr>
+            <td width="90%"><h4>Eventos Cadastrados</h4></td>
+            <td align="right"><a href="{% url 'evento-create' %}" class="button button-border button-rounded button-blue m-0">Novo</a></td>
+        </tr>
+    </table>
+</div>
+
+<div class="container mw-md">
+
+    <div class="tabs block-tab-2 tabs-alt tabs-responsive tabs-justify" id="tab">
+        <ul class="tab-nav">
+            <li><a href="#tabs-active"><i class="icon-calendar-alt1"></i>Agendados</a></li>
+            <li><a href="#tabs-passed"><i class="icon-time"></i>Passados</a></li>
+            <li><a href="#tabs-canceled"><i class="icon-calendar-times1"></i>Cancelados</a></li>
+        </ul>
+
+        <div class="tab-container mt-4">
+
+            <div class="tab-content" id="tabs-active">
+                <div class="row col-mb-30 align-items-center">
+
+                    <table class="table table-striped">
+                        <col width="31%">
+                        <col width="31%">
+                        <col width="31%">
+                        <col width="6%">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Evento</th>
+                                <th>Escopo</th>
+                                <th>Ver</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for e in agendados %}
+                            <tr>
+                                <td>{{e.evento.data_evento}}</td>
+                                <td>{{e.evento}}</td>
+                                <td>{{e.evento.scope}}</td>
+                                <td><a href="{% url 'evento-detail' e.evento.pk %}"><i class="icon-eye"></i></a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td>Sem eventos agendados</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div class="tab-content" id="tabs-passed">
+                <div class="row col-mb-30 flex-row-reverse align-items-center">
+
+                    <table class="table table-striped">
+                        <col width="31%">
+                        <col width="31%">
+                        <col width="31%">
+                        <col width="6%">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Evento</th>
+                                <th>Escopo</th>
+                                <th>Ver</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for e in passados %}
+                            <tr>
+                                <td>{{e.evento.data_evento}}</td>
+                                <td>{{e.evento}}</td>
+                                <td>{{e.evento.scope}}</td>
+                                <td><a href="{% url 'evento-detail' e.evento.pk %}"><i class="icon-eye"></i></a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td>Sem eventos passados</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div class="tab-content" id="tabs-canceled">
+                <div class="row col-mb-30 flex-row-reverse align-items-center">
+
+                    <table class="table table-striped">
+                        <col width="31%">
+                        <col width="31%">
+                        <col width="31%">
+                        <col width="6%">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Evento</th>
+                                <th>Escopo</th>
+                                <th>Ver</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for e in cancelados %}
+                            <tr>
+                                <td>{{e.evento.data_evento}}</td>
+                                <td>{{e.evento}}</td>
+                                <td>{{e.evento.scope}}</td>
+                                <td><a href="{% url 'evento-detail' e.evento.pk %}"><i class="icon-eye"></i></a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td>Sem eventos cancelados</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
