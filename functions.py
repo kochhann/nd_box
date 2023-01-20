@@ -7,7 +7,7 @@ from django.contrib.auth.models import (
     Group
 )
 from django.db import connection
-
+from django.conf import settings
 from apps.agamotto.models import (
     ScheduledTask
 )
@@ -545,9 +545,25 @@ def mail_is_valid(email):
     return re.fullmatch(regex, email)
 
 
-def log_writer():
-    a = open('log_scheduled.txt', 'a')
+def log_writer(function_name, log_message):
+    path = settings.LOG_FILES
     now = datetime.now()
+    date_only = now.strftime("%m_%d_%Y")
     date_time = now.strftime("%m/%d/%Y, %H:%M:%S\n")
+    a = open(f'{path}\\{function_name}_{date_only}.txt', 'a')
     a.write(date_time)
+    a.writelines(log_message)
+    a.write('---------------------\n')
+    a.close()
+
+
+def error_log_writer(function_name, log_message):
+    path = settings.LOG_FILES
+    now = datetime.now()
+    date_only = now.strftime("%m_%d_%Y")
+    date_time = now.strftime("%m/%d/%Y, %H:%M:%S\n")
+    a = open(f'{path}\\error_log_{function_name}_{date_only}.txt', 'a')
+    a.write(date_time)
+    a.writelines(log_message)
+    a.write('---------------------\n')
     a.close()

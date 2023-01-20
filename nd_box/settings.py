@@ -101,7 +101,7 @@ DATABASES = {
         'HOST': config('DB_HOST'),
         'PORT': '',
         'OPTIONS': {
-            'driver': 'ODBC Driver 13 for SQL Server',
+            'driver': 'ODBC Driver 17 for SQL Server',
         },
     },
 }
@@ -148,6 +148,9 @@ MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+if not os.path.exists(os.path.join(BASE_DIR, 'log_file')):
+    os.makedirs(os.path.join(BASE_DIR, 'log_file'))
+LOG_FILES = os.path.join(BASE_DIR, 'log_file')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -158,11 +161,11 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # During development only
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # During development only
 
-EMAIL_BACKEND = config('EMAIL_BACKEND')
-AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+# EMAIL_BACKEND = config('EMAIL_BACKEND')
+# AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+# AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
 DEFAULT_FROM_EMAIL = 'contato@nd.org.br'
 
 SESSION_EXPIRE_SECONDS = 1800              # 30 min

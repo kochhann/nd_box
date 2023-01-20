@@ -2,6 +2,7 @@ import datetime
 import re
 import requests
 from django.core.mail import EmailMultiAlternatives
+from django.core.exceptions import *
 from django.template.loader import render_to_string
 from decouple import config
 
@@ -183,14 +184,20 @@ def send_nd_mail(message):
         msg = EmailMultiAlternatives(subject, email, from_email, to, reply_to=[message.email_remetente])
         msg.attach_alternative(email, "text/html")
 
-    msg.send()
+    try:
+        msg.send()
+    except e:
+        log_message = ['---------------------\n',
+                       f'ID: {message.id}',
+                       f'Destino: {message.email_destino}']
+        error_log_writer(send_scheduled_messages.__name__, log_message)
 
 
 def send_comtele(sender_id, receiver, message):
     # sender_id = 01 para envio de boletos
     auth_key = config('COMTELE-KEY')
     url = "https://sms.comtele.com.br/api/v2/send"
-    msg = f'Comunicado ND{message}'
+    msg = f'Comunicado ND: {message}'
     payload = "{\"Sender\":\"" + sender_id + "\",\"Receivers\":\"" + receiver + "\",\"Content\":\"" + msg + "\"}"
     headers = {
         'content-type': "application/json",
