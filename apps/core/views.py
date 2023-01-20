@@ -227,14 +227,16 @@ class IndexView(TemplateView):
                                                  evento__data_cancelamento=None)
             ev_un_x = []
             solicitacoes = 0
-            for e in ev_un:
-                if e.evento.gerador == 2:
-                    a = e.evento.autorizacao_set.first()
-                    if not a.autorizado:
-                        solicitacoes += 1
-                else:
-                    if not e.evento.is_past_due:
-                        ev_un_x.append(e)
+            if ev_un:
+                for e in ev_un:
+                    if e.evento.gerador == 2:
+                        a = e.evento.autorizacao_set.first()
+                        if a:
+                            if not a.autorizado:
+                                solicitacoes += 1
+                    else:
+                        if not e.evento.is_past_due:
+                            ev_un_x.append(e)
             eventos = sorted(ev_un_x, key=attrgetter('evento.data_evento'))[:2]
             context['doc_title'] = 'Gestão de eventos'
             context['top_app_name'] = 'Autorizações'
