@@ -52,4 +52,4 @@ def start():
     scheduler.add_job(update_turma_gv, 'cron', hour='0', minute='25')
     scheduler.add_job(check_enturmacao, 'cron', hour='0', minute='30')
 
-    scheduler.start()
+    # scheduler.start()

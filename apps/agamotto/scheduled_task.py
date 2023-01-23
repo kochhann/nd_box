@@ -170,7 +170,7 @@ def update_ciclo_gv():
 def update_turma_gv():
     log_message = []
     log_message.append('Atualização de Turmas\n')
-    turmas = Turma.objects.all()
+    turmas = Turma.objects.filter(ativo=True)
     gv_turmas = get_gv_turma(0, datetime.now().year)
     list_codes_gv = []
     list_codes_local = []
@@ -201,6 +201,12 @@ def update_turma_gv():
                     log_message.append(f'Turma adicionada: {nt.nome}\n')
     else:
         log_message.append('Não há novas turmas.\n')
+    old = Turma.objects.filter(ativo=True).exclude(ano=timezone.now().year)
+    if old:
+        for item in old:
+            item.soft_delete()
+        log_message.append(f'Desativação de turmas antigas\n'
+                           f'Foram desativadas {str(len(old))} turmas.\n')
     log_message.append('Atualização de turmas concluída.\n')
     log_writer(update_turma_gv.__name__, log_message)
 

@@ -22,6 +22,7 @@ class CursoAdmin(admin.ModelAdmin):
 class CicloAdmin(admin.ModelAdmin):
     ordering = ('curso', 'nome')
     list_display = ['nome', 'unidade', 'curso', 'gv_code', 'ativo']
+    list_filter = ['curso']
 
     def unidade(self, obj):
         return obj.curso.unidade.nome
