@@ -337,13 +337,20 @@ def check_scheduled_sms_boletos():
 
 
 def send_bkp_ftp():
+    log_message = []
+    log_message.append('Envio de bkp para FTP GV Dasa\n')
     host = config('HOST')
     user = config('USER')
     password = config('PASS')
     path = path = settings.BKP_DB
-    ftp = ftplib.FTP(host, user, password)
-    file = open(f'{path}\\bkp_espelho.bak', 'rb')
-    ftp.storbinary("STOR bkp_espelho.bak", file)
-    print(ftp.dir())
-    ftp.close()
-
+    try:
+        ftp = ftplib.FTP(host, user, password)
+        file = open(f'{path}\\bkp_espelho.bak', 'rb')
+        ftp.storbinary("STOR bkp_espelho.bak", file)
+        ftp.close()
+        log_message.append('Envio concluído.\n')
+        log_writer(send_bkp_ftp.__name__, log_message)
+    except e:
+        error_log_message = [f'Erro ao realizar tarefa:\n'
+                             f'{str(e)}\n']
+    error_log_writer(send_bkp_ftp.__name__, log_message)
