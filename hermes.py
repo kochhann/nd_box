@@ -106,8 +106,8 @@ def send_welcome_mail(responsavel):
     email = render_to_string(email_template_name, m_context)
     subject = 'Rede Notre Dame - Confirmação de cadastro'
     from_email = '"Sistema ND Box" <contato@nd.org.br>'
-    to = 'apoio.ti@nd.org.br'
-    # to = responsavel.email
+    # to = 'apoio.ti@nd.org.br'
+    to = responsavel.email
     msg = EmailMultiAlternatives(subject, email, from_email, [to])
     msg.attach_alternative(email, "text/html")
 
@@ -191,6 +191,27 @@ def send_nd_mail(message):
                        f'ID: {message.id}',
                        f'Destino: {message.email_destino}']
         error_log_writer(send_scheduled_messages.__name__, log_message)
+
+
+def send_new_notification_mail(evento, responsavel):
+    email_template_name = 'email/new_notification.html'
+    date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    m_context = {
+        "evento": evento.nome,
+        "responsavel": responsavel,
+        "data_evento": evento.data_evento.strftime("%d/%m/%Y"),
+        "sender": 'Eventos'
+
+    }
+    email = render_to_string(email_template_name, m_context)
+    subject = 'Rede Notre Dame - Há um novo documento aguardando aprovação'
+    from_email = '"Sistema ND Box" <contato@nd.org.br>'
+    # to = 'apoio.ti@nd.org.br'
+    to = responsavel.email
+    msg = EmailMultiAlternatives(subject, email, from_email, [to])
+    msg.attach_alternative(email, "text/html")
+
+    msg.send()
 
 
 def send_comtele(sender_id, receiver, message):

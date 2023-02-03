@@ -1,6 +1,9 @@
+import ftplib
 from datetime import datetime
+from decouple import config
 from django.core.exceptions import *
 from django.utils import timezone
+from django.conf import settings
 from .models import (
     ScheduledTask,
     MailMessageScheduler,
@@ -331,4 +334,16 @@ def check_scheduled_sms_boletos():
         log_message = ['Não há mensagens a enviar\n',
                        'Fim do log.\n']
         log_writer(check_scheduled_sms_boletos.__name__, log_message)
+
+
+def send_bkp_ftp():
+    host = config('HOST')
+    user = config('USER')
+    password = config('PASS')
+    path = path = settings.BKP_DB
+    ftp = ftplib.FTP(host, user, password)
+    file = open(f'{path}\\bkp_espelho.bak', 'rb')
+    ftp.storbinary("STOR bkp_espelho.bak", file)
+    print(ftp.dir())
+    ftp.close()
 

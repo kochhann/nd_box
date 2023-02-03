@@ -1,7 +1,11 @@
 from django.db import models
+import uuid
 from django.urls import reverse
 from datetime import date, timedelta
-from hermes import send_cancel_mail
+from hermes import (
+    send_cancel_mail,
+    send_new_notification_mail
+)
 from apps.core.models import (
     Base,
     Turma,
@@ -12,6 +16,12 @@ from apps.core.models import (
 from apps.agamotto.models import ScheduledTask
 from django.utils import timezone
 from django.contrib.auth.models import User
+
+
+def get_file_path(_instance, filename):
+    ext = filename.split('.')[-1]
+    filename = f'{uuid.uuid4()}.{ext}'
+    return filename
 
 
 class Autorizador(Base):
@@ -248,6 +258,7 @@ class Evento(Base):
                                   aluno=aluno,
                                   termos=model.texto)
                 aut.save()
+                send_new_notification_mail(self, aluno.responsavel)
 
     def gera_aut_aluno(self, aluno):
         tipo_aut = self.eventotipoautorizacao_set.filter(ativo=True)
@@ -397,7 +408,7 @@ class Autorizacao(Base):
         self.save()
 
     def __str__(self):
-        return self.evento.nome + ' - ' + self.aluno.nome
+        return self.evento.nome
 
     def autorizar(self):
         self.autorizado = True
@@ -438,6 +449,29 @@ class Autorizacao(Base):
     class Meta:
         verbose_name = 'Autorização'
         verbose_name_plural = 'Autorizações'
+
+
+class AnexoAutorizacao(Base):
+    id = models.AutoField(primary_key=True, blank=False, null=False)
+    descricao = models.CharField('Descrição', max_length=100, blank=False, null=False, default='anexo')
+    arquivo = models.FileField(upload_to=get_file_path, blank=True, null=True)
+    numero = models.IntegerField('Número de sequência', blank=True, null=True, default=1)
+    autorizacao = models.ForeignKey(Autorizacao, verbose_name='Autorização', on_delete=models.SET_NULL, blank=True,
+                                    null=True)
+
+    def soft_delete(self):
+        self.ativo = False
+        self.data_desativado = timezone.now()
+        self.save()
+
+    def __str__(self):
+        return str(self.numero) + ' - ' + self.autorizacao.aluno.nome
+
+    class Meta:
+        verbose_name = 'Anexo de autorização'
+        verbose_name_plural = 'Anexos de Autorização'
+
+
 
 
 class EventoTipoAutorizacao(Base):

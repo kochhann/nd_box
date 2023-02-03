@@ -1,0 +1,49 @@
+{% extends 'autorizador_base.html' %}
+{% block autorizador %}
+<div class="heading-block fancy-title nobottomborder">
+    <table class="table">
+        <tr>
+            <td width="90%"><h4>Novo anexo para</h4> - {{autorizacao}} - {{autorizacao.evento.data_evento}}</td>
+            <td align="right"><a href="{% url 'index' %}" class="button button-border button-rounded button-red" disabled="disabled">Cancelar</a></td>
+        </tr>
+    </table>
+</div>
+
+<div class="container mw-md">
+    <!-- Form Solicitação -->
+    <div class="col-lg-12 pl-lg-5 just-text">
+        <form class="row" id="form-anexo_solicitacao" method="post" action="#" enctype="multipart/form-data">
+        {{ form.non_field_errors }}
+        {% csrf_token %}
+            <input type="hidden" name="autorizacao" value={{autorizacao.pk}} />
+            <input type="hidden" name="numero" value={{numero_seq}} />
+            <div class="form-process">
+                <div class="css3-spinner">
+                    <div class="css3-spinner-scaler"></div>
+                </div>
+            </div>
+            <div class="col-12 bottommargin">
+                <label>Selecione um arquivo para anexar</label><br>
+                <input type="file" id="anexo_solicitacao-arquivo" name="arquivo" class="file-loading"
+                       data-show-preview="false" required/>
+            </div>
+            <div class="col-12 form-group">
+                <input type="text" name="descricao" id="anexo_solicitacao-descricao" class="form-control"
+                placeholder="Descrição" required>
+            </div>
+           <div class="divider" style="margin: 1rem;"></div>
+            <div class="col-12 d-none">
+                <input type="text" id="anexo_solicitacao-botcheck" name="anexo_solicitacao-botcheck" value="" />
+            </div>
+            <div class="col-12">
+                <button type="submit" name="anexo_solicitacao-submit" id="anexo_solicitacao-submit"
+                        class="button button-border button-rounded button-blue">Enviar</button>
+            </div>
+            <input type="hidden" name="prefix" value="solicitacao-" />
+
+        </form>
+    </div>
+    <div class="w-100 line d-block d-md-none"></div>
+</div>
+
+{% endblock %}

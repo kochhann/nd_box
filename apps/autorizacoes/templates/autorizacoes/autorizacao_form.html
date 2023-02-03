@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="col-12 form-group">
-                <select name="aluno" class="form-select" id="id_aluno">
+                <select name="aluno" class="form-select" id="id_aluno" required>
                     <option value="" selected>-- Aluno --</option>
                     {% for item in dependentes %}
                     <option value="{{item.pk}}">{{item}}</option>
@@ -42,8 +42,7 @@
                 style="resize: none;" placeholder="Motivo da solicitação (mínimo de 20 caracteres)" onkeyup="countChar(this)" required></textarea>
                 <div id="charNum">1000</div>
             </div>
-
-            <div class="divider" style="margin: 1rem;"></div>
+           <div class="divider" style="margin: 1rem;"></div>
             <div class="col-12 d-none">
                 <input type="text" id="solicitacao-botcheck" name="solicitacao-botcheck" value="" />
             </div>

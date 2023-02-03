@@ -7,7 +7,8 @@ from datetime import datetime
 from django.utils import timezone
 from django.http import HttpResponse, HttpResponseRedirect
 from io import BytesIO
-
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 from django.utils.decorators import method_decorator
 from reportlab.lib.colors import black
 from reportlab.lib.styles import ParagraphStyle as PS
@@ -34,7 +35,8 @@ from .models import (
     Aluno,
     Autorizacao,
     AutorizacoesModel,
-    EventoTipoAutorizacao
+    EventoTipoAutorizacao,
+    AnexoAutorizacao
 )
 from apps.core.models import (
     Turma,
@@ -46,7 +48,8 @@ from .forms import (
     EventoForm,
     EventoEditForm,
     EventoCancelForm,
-    AutorizacaoForm
+    AutorizacaoForm,
+    AnexoAutorizacaoForm
 )
 from apps.agamotto.models import ScheduledTask
 
@@ -552,6 +555,38 @@ class AutorizacaoCreate(CreateView):
         print(form.errors)
         messages.error(self.request, 'Erro ao processar solicitação')
         return super(AutorizacaoCreate, self).form_invalid(form, *args, **kwargs)
+
+
+class AnexaDocAutorizacao(CreateView):
+    model = AnexoAutorizacao
+    form_class = AnexoAutorizacaoForm
+
+    def get_context_data(self, **kwargs):
+        context = super(AnexaDocAutorizacao, self).get_context_data(**kwargs)
+        aut = Autorizacao.objects.get(pk=self.kwargs['pk'])
+        context['autorizacao'] = aut
+        context['doc_title'] = 'Área do Usuário'
+        context['top_app_name'] = 'Autorizações'
+        context['pt_h1'] = 'Gestão de Solicitações'
+        context['pt_span'] = 'Novo Anexo'
+        context['pt_breadcrumb2'] = 'Área do usuário'
+        return context
+
+    def form_valid(self, form, *args, **kwargs):
+        aut = Autorizacao.objects.get(pk=self.request.POST.get('autorizacao', None))
+        numero = len(aut.anexoautorizacao_set.all()) + 1
+        anexo = form.save(commit=False)
+        anexo.numero = numero
+        anexo.autorizacao = aut
+        anexo.save()
+        messages.success(self.request, 'Arquivo anexado com sucesso')
+        return redirect('autorizacao-detail', aut.pk)
+
+    def form_invalid(self, form, *args, **kwargs):
+        print(form.errors)
+        messages.error(self.request, 'Erro ao processar solicitação')
+        return super(AnexaDocAutorizacao, self).form_invalid(form, *args, **kwargs)
+
 
 
 class PrintAutReportView(View):

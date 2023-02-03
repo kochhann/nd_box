@@ -8,6 +8,7 @@ from .models import (
     EventoUnidade,
     AutorizacoesModel,
     Autorizacao,
+    AnexoAutorizacao,
     EventoTipoAutorizacao
 )
 
@@ -50,6 +51,12 @@ class AutorizacoesModelAdmin(admin.ModelAdmin):
 @admin.register(Autorizacao)
 class AutorizacaoAdmin(admin.ModelAdmin):
     list_display = ['evento', 'aluno', 'autorizado', 'tipo', 'ativo']
+
+
+@admin.register(AnexoAutorizacao)
+class AnexoAutorizacaoAdmin(admin.ModelAdmin):
+    list_display = ['autorizacao', 'numero']
+    list_filter = ['autorizacao']
 
 
 @admin.register(EventoTipoAutorizacao)

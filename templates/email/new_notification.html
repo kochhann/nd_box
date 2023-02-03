@@ -1,0 +1,35 @@
+{% extends 'email/base_email.html' %}
+{% block content %}
+
+<div class="fancy-title title-bottom-border">
+    <h2 class="b-text">Estamos aguardando sua aprovação no documento descrito abaixo.</h2>
+</div>
+<br>
+<p class="b-text">Há um documento aguardando sua aprovação, referente ao evento {{evento}},
+    que acontecerá em {{data_evento}} </p>
+<br>
+<p class="b-text">
+    Para aprovar a solicitação pendente, acesse sua área de usuário no link abaixo, e visite a sessão Autorizações.
+    Após ler todo o documento, você encontrará as opões referentes a ele.
+</p>
+
+<div class="col-12 col-md-auto">
+    <img src="https://otordame.sirv.com/Images/notre_dame/user_x_01.jpg" style="height: auto;" alt="" />
+</div>
+<br>
+<p class="b-text">Para acessar o sistema ND Box, <a href="https://www.webnd.com.br/nd_box/login/">CLIQUE AQUI</a></p>
+<br>
+<p class="b-text">
+    Caso não reconheça o conteúdo desta mensagem, encaminhe este e-mail para dpo@nd.org.br.
+</p>
+<br>
+<p class="b-text">
+    Esta é uma mensagem automática, não responda. Para mais informações, envie mensagem para tecnologia@nd.org.br
+</p>
+
+<br>
+<br>
+<h3 class="b-text">Sistema ND Box</h3>
+<p class="b-text">Associação Notre Dame</p>
+
+{% endblock %}

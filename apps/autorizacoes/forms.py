@@ -2,7 +2,8 @@ from django import forms
 from .models import (
     Evento,
     AutorizacoesModel,
-    Autorizacao
+    Autorizacao,
+    AnexoAutorizacao
 )
 
 
@@ -68,3 +69,10 @@ class AutorizacaoForm(forms.ModelForm):
     class Meta:
         model = Autorizacao
         fields = ['aluno']
+
+
+class AnexoAutorizacaoForm(forms.ModelForm):
+    class Meta:
+        model = AnexoAutorizacao
+        fields = ['arquivo', 'descricao']
+

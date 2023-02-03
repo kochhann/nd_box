@@ -17,7 +17,8 @@ from .views import (
     EventoTipoAutorizacaoDelete,
     EventoCancel,
     AutorizacaoGerar,
-    MensagensList
+    MensagensList,
+    AnexaDocAutorizacao
 )
 
 
@@ -37,6 +38,7 @@ urlpatterns = [
     path('autorizacao/<int:pk>/', AutorizacaoView.as_view(), name='autorizacao-detail'),
     path('autorizacao/released/success/', AutorizacaoReleaseSuccess.as_view(), name='autorizacao-released-success'),
     path('autorizacao/released/', AutorizacaoReleased.as_view(), name='autorizacao-released'),
+    path('autorizacao/anexar/<int:pk>', AnexaDocAutorizacao.as_view(), name='autorizacao-attach'),
     path('autorizacao/print/<int:rpt_type>/<int:evento_id>/', PrintAutReportView.as_view(), name='autorizacao-print'),
     path('evento/tipo_aut/delete/<int:pk>/', EventoTipoAutorizacaoDelete.as_view(), name='evento-ta-delete'),
     path('mensagens/list/', MensagensList.as_view(), name='mensagem-list')

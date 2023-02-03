@@ -53,6 +53,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+bkp_db/
 build/
 log_file/
 develop-eggs/

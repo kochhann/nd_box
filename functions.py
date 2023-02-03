@@ -15,7 +15,8 @@ from apps.autorizacoes.models import (
     Autorizador,
     Aluno,
     Enturmacao,
-    Evento
+    Evento,
+    AnexoAutorizacao
 )
 from apps.core.models import (
     Unidade,
