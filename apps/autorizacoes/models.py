@@ -472,8 +472,6 @@ class AnexoAutorizacao(Base):
         verbose_name_plural = 'Anexos de Autorização'
 
 
-
-
 class EventoTipoAutorizacao(Base):
     id = models.AutoField(primary_key=True, blank=False, null=False)
     tipo_autorizacao = models.ForeignKey(AutorizacoesModel,

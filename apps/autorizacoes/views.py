@@ -447,11 +447,20 @@ class AutorizacaoView(DetailView):
                                self.object.evento.data_cancelamento.strftime('%d/%m/%Y'))
         else:
             context['solicitacao'] = True
-            if coordenador:
-                if self.object.autorizado is not None or self.object.autorizado is False:
-                    aut = Autorizacao.objects.get(pk=self.kwargs['pk'])
-                    aut.autorizar()
+            # if coordenador:
+            #     if self.object.autorizado is not None or self.object.autorizado is False:
+            #         aut = Autorizacao.objects.get(pk=self.kwargs['pk'])
+            #         aut.autorizar()
         return context
+
+
+class RegistrarSolicitacao(View):
+    def get(self, request, *args, **kwargs):
+        aut = Autorizacao.objects.get(pk=self.kwargs['pk'])
+        if aut:
+            aut.autorizar()
+        messages.success(self.request, 'Solicitação registrada com sucesso')
+        return redirect('autorizacao-detail', self.kwargs['pk'])
 
 
 class AutorizacaoReleased(View):

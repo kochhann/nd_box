@@ -568,3 +568,7 @@ def error_log_writer(function_name, log_message):
     a.writelines(log_message)
     a.write('---------------------\n')
     a.close()
+
+
+def nd_document_registration():
+    pass

@@ -2,7 +2,7 @@
 {% block content %}
 <!-- Content
 ============================================= -->
-<section id="content">
+<section id="content" xmlns="http://www.w3.org/1999/html">
     <div class="content-wrap">
         <div class="container clearfix">
 
@@ -39,24 +39,66 @@
                                             <p><i>{{ object.evento.obs_cancelamento }}</i></p>
                                         </blockquote>
                                     </div>
+
+                                {% else %}
+                                    {% if object.autorizado %}
+                                        <div class="col-md-12 form-group">
+                                            <div class="label">
+                                                <label>Solicitação lida em {{ object.data_resposta_titular }}</label>
+                                            </div>
+                                        </div>
+                                    {% elif not object.autorizado %}
+                                        <div class="col-md-12 form-group">
+                                            <div class="label">
+                                                <label>Solicitação não foi lida.</label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
                                 {% endif %}
                             {% else %}
                                 {% if object.autorizado %}
-                                    <div class="col-md-12 form-group">
-                                        <div class="label">
-                                            <label>Solicitação lida em {{ object.data_resposta_titular }}</label>
+                                        <div class="col-md-12 form-group">
+                                            <div class="label">
+                                                <label>Solicitação registrada em {{ object.data_resposta_titular }}</label>
+                                            </div>
                                         </div>
-                                    </div>
-                                {% elif not object.autorizado %}
-                                    <div class="col-md-12 form-group">
-                                        <div class="label">
-                                            <label>Solicitação não foi lida.</label>
+                                    {% elif not object.autorizado %}
+                                        <div class="col-md-12 form-group">
+                                            <div class="label">
+                                                <label>Solicitação aguardando registro da unidade.</label>
+                                            </div>
                                         </div>
-                                    </div>
-                                {% endif %}
+                                    {% endif %}
                         <!-- Anexos -->
                                 {% if object.anexoautorizacao_set.all %}
-                        <p> há anexos </p>
+                        <div class="label">
+                            <label>Anexos</label>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <col width="80%">
+                                <col width="10%">
+                                <col width="10%">
+                                <thead>
+                                    <tr>
+                                        <th>Descrição</th>
+                                        <th>Nº</th>
+                                        <th>Anexo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in object.anexoautorizacao_set.all %}
+                                    <tr>
+                                        <td>{{item.descricao}}</td>
+                                        <td>{{item.numero}}</td>
+                                        <td><a href="{{ item.arquivo.url }}" target="_blank"><i class="icon-eye"></i></a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+
                                 {% endif %}
                         <div class="col-12">
                             <a href="{% url 'autorizacao-attach' object.pk %}" class="button button-border button-mini
@@ -107,16 +149,44 @@
                                 {% if object.autorizado %}
                                     <div class="col-md-12 form-group">
                                         <div class="label">
-                                            <label>Solicitação lida em {{ object.data_resposta_titular }}</label>
+                                            <label>Solicitação registrada em {{ object.data_resposta_titular }}</label>
                                         </div>
                                     </div>
                                 {% else %}
                                     <div class="col-md-12 form-group">
                                         <div class="label">
-                                            <label>Solicitação não foi lida.</label>
+                                            <label>Solicitação aguardando registro.</label>
                                         </div>
                                     </div>
-
+                                {% endif %}
+                                <!-- Anexos -->
+                                {% if object.anexoautorizacao_set.all %}
+                                    <div class="label">
+                                        <label>Anexos</label>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped">
+                                            <col width="80%">
+                                            <col width="10%">
+                                            <col width="10%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Descrição</th>
+                                                    <th>Nº</th>
+                                                    <th>Anexo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for item in object.anexoautorizacao_set.all %}
+                                                <tr>
+                                                    <td>{{item.descricao}}</td>
+                                                    <td>{{item.numero}}</td>
+                                                    <td><a href="{{ item.arquivo.url }}" target="_blank"><i class="icon-eye"></i></a></td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 {% endif %}
                             {% endif %}
                         {% endif %}
@@ -133,7 +203,7 @@
                         {{ object.termos|linebreaks }}
                     </p>
                 </div>
-
+                <!-- Dados do evento gerador -->
                 <div class="col-md-8">
                     <h5>{% if not solicitacao %} Dados do evento {% else %} Informações {% endif %}</h5>
                     <ul class="list-group list-group-flush">
@@ -154,7 +224,7 @@
                         <li class="list-group-item">Do que se trata: {{ object.evento.descricao }}</li>
                     </ul>
                 </div>
-
+                <!-- Dados do responsável -->
                 <div class="col-md-4">
                     <h5>Dados do responsável</h5>
                     <ul class="list-group list-group-flush">
@@ -220,6 +290,11 @@
                 </div>
                 {% else %}
                 <div class="col-12">
+                    {% if solicitacao %}
+                        {% if not object.autorizado %}
+                    <a href="{% url 'solicitacao-registrar' object.pk %}" class="button button-border button-rounded button-green">Registrar</a>
+                        {% endif %}
+                    {% endif %}
                     <a href="#" onclick="history.back();" class="button button-border button-rounded button-blue">Voltar</a>
                 </div>
                 {% endif %}

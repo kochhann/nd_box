@@ -18,7 +18,8 @@ from .views import (
     EventoCancel,
     AutorizacaoGerar,
     MensagensList,
-    AnexaDocAutorizacao
+    AnexaDocAutorizacao,
+    RegistrarSolicitacao
 )
 
 
@@ -36,6 +37,7 @@ urlpatterns = [
     path('autorizacao/success/', AutorizacaoSuccess.as_view(), name='evento-autorizacoes-success'),
     path('autorizacao/scheduled/', AutorizacaoScheduled.as_view(), name='evento-autorizacoes-scheduled'),
     path('autorizacao/<int:pk>/', AutorizacaoView.as_view(), name='autorizacao-detail'),
+    path('autorizacao/registrar/<int:pk>/', RegistrarSolicitacao.as_view(), name='solicitacao-registrar'),
     path('autorizacao/released/success/', AutorizacaoReleaseSuccess.as_view(), name='autorizacao-released-success'),
     path('autorizacao/released/', AutorizacaoReleased.as_view(), name='autorizacao-released'),
     path('autorizacao/anexar/<int:pk>', AnexaDocAutorizacao.as_view(), name='autorizacao-attach'),

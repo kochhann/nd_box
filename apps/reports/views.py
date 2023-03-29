@@ -566,11 +566,24 @@ class PrintStatisticsView(View):
             teatcher = []
             regular = []
             for a in employees_data:
-                if a.SINDICATO == '0001':
-                    teatcher.append(a)
+                # TODO: Remover as linhas abaixo até a marcação, após atualização da
+                #  consulta nos contratos de trabalho
+                if a.NOME.title() == 'Tais Streb Artmann':
+                    if slctd_year in ('2020', '2021', '2023'):
+                        regular.append(a)
+                    else:
+                        teatcher.append(a)
                 else:
-                    regular.append(a)
-
+                    if a.SINDICATO == '0001':
+                        teatcher.append(a)
+                    else:
+                        regular.append(a)
+                # ------ #
+                # TODO: Retornar trecho abaixo após correção
+                # if a.SINDICATO == '0001':
+                #     teatcher.append(a)
+                # else:
+                #     regular.append(a)
         activities_data = get_activities(id_annals, id_house)
 
         if school:
@@ -1317,10 +1330,25 @@ class PrintStatisticsView(View):
                                 str_name = a.NOME
                                 count += 1
                                 str_count = str(count)
+                        desc = a.DESCRICAO40
+                        hr_cont = str(round(a.HORASCONTRATUAIS/Decimal(4.5)))
+                        # TODO: Remover as linhas abaixo até a marcação, após atualização da
+                        #  consulta nos contratos de trabalho
+                        if a.NOME.title() == 'Tais Streb Artmann':
+                            if slctd_year in ('2020', '2021'):
+                                desc = 'Assistente de Ensino'
+                                hr_cont = str(round(150.00/Decimal(4.5)))
+                            if slctd_year == '2022':
+                                desc = 'Prof. Ens. Fundamental'
+                                hr_cont = str(round(94.5 / Decimal(4.5)))
+                            else:
+                                desc = 'Coord. Pedagógica'
+                                hr_cont = str(round(200.00 / Decimal(4.5)))
+                        # ------ #
                         data = [[Paragraph(str_count, c2),
                                  Paragraph(str_name.title(), c2),
-                                 Paragraph(a.DESCRICAO40, c2),
-                                 Paragraph(str(round(a.HORASCONTRATUAIS/Decimal(4.5))), c1)]]
+                                 Paragraph(desc, c2),
+                                 Paragraph(hr_cont, c1)]]
                         t = Table(data, colWidths=[35.0, 190.0, 180.0, 50.0])
                         t.setStyle(TableStyle([('ALIGN', (0, 0), (1, 0), 'LEFT'),
                                                ('ALIGN', (1, 0), (3, 0), 'CENTRE'),
@@ -1444,10 +1472,25 @@ class PrintStatisticsView(View):
                     count = 0
                     for a in regular:
                         count += 1
+                        desc = a.DESCRICAO40
+                        hr_cont = str(round(a.HORASCONTRATUAIS/Decimal(4.5)))
+                        # TODO: Remover as linhas abaixo até a marcação, após atualização da
+                        #  consulta nos contratos de trabalho
+                        if a.NOME.title() == 'Tais Streb Artmann':
+                            if slctd_year in ('2020', '2021'):
+                                desc = 'Assistente de Ensino'
+                                hr_cont = str(round(150.00/Decimal(4.5)))
+                            if slctd_year == '2022':
+                                desc = 'Prof. Ens. Fundamental'
+                                hr_cont = str(round(94.5 / Decimal(4.5)))
+                            else:
+                                desc = 'Coord. Pedagógica'
+                                hr_cont = str(round(200.00 / Decimal(4.5)))
+                        # ------ #
                         data = [[Paragraph(str(count), c2),
                                  Paragraph(a.NOME.title(), c2),
-                                 Paragraph(a.DESCRICAO40, c2),
-                                 Paragraph(str(round(a.HORASCONTRATUAIS/Decimal(5.0))), c1)]]
+                                 Paragraph(desc, c2),
+                                 Paragraph(hr_cont, c1)]]
                         t = Table(data, colWidths=[35.0, 190.0, 180.0, 50.0])
                         t.setStyle(TableStyle([('ALIGN', (0, 0), (1, 0), 'LEFT'),
                                                ('ALIGN', (1, 0), (3, 0), 'CENTRE'),
