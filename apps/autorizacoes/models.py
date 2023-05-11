@@ -202,7 +202,7 @@ class Evento(Base):
     descricao = models.CharField("Descricao", max_length=1000, blank=False, null=False)
     data_evento = models.DateField('Data', blank=False, null=False)
     gerador = models.IntegerField("Gerador", choices=GERADOR_CHOICES, blank=False, null=False, default=1)
-    data_termino = models.DateField('Data Término', blank=False, null=False)
+    data_termino = models.DateField('Data Término', blank=True, null=True)
     data_cancelamento = models.DateField('Data Cancelamento', blank=True, null=True)
     local_evento = models.CharField("Cidade/UF", max_length=100, blank=False, null=False)
     aluno = models.ForeignKey(Aluno, verbose_name='Aluno', on_delete=models.SET_NULL, blank=True, null=True)

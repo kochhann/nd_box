@@ -70,7 +70,8 @@ def update_unidade_gv():
                              cidade=item.CIDADE,
                              estado=item.ESTADO,
                              cnpj=item.CNPJ,
-                             cnae=item.CNAE)
+                             cnae=item.CNAE,
+                             empresa=item.CODIGOEMPRESA)
                 if nu.cnae[0:2] == '85':
                     nu.is_school = True
                 l_item.update_from_origin(nu)
@@ -87,7 +88,8 @@ def update_unidade_gv():
                                  estado=item.ESTADO,
                                  gv_code=item.GV_CODE,
                                  cnpj=item.CNPJ,
-                                 cnae=item.CNAE)
+                                 cnae=item.CNAE,
+                                 empresa=item.CODIGOEMPRESA)
                     if item.CNAE[0:2] == '85':
                         nu.is_school = True
                     nu.save()
@@ -280,7 +282,10 @@ def check_scheduled_messages():
                 nd_code=msg.ID
             )
             ms.save()
+            set_message_as_sent(ms.nd_code)
             cnt += 1
+        ## envio
+        send_scheduled_messages()
 
 
 def send_scheduled_messages():
@@ -289,7 +294,7 @@ def send_scheduled_messages():
         for item in msg:
             try:
                 item.send()
-                set_message_as_sent(item.nd_code)
+                # set_message_as_sent(item.nd_code)
             except e:
                 log_message = [f'ID: {tem.id}\n',
                                f'Destino: {item.email_destino}\n']
@@ -342,13 +347,15 @@ def send_bkp_ftp():
     host = config('HOST')
     user = config('USER')
     password = config('PASS')
-    path = path = settings.BKP_DB
+    path = settings.BKP_DB
     try:
         ftp = ftplib.FTP(host, user, password)
         file = open(f'{path}\\bkp_espelho.bak', 'rb')
         ftp.storbinary("STOR bkp_espelho.bak", file)
+        log_message.append('Resultado da transferência:\n')
+        ftp.dir(log_message.append)
         ftp.close()
-        log_message.append('Envio concluído.\n')
+        log_message.append('\nEnvio concluído.\n')
         log_writer(send_bkp_ftp.__name__, log_message)
     except e:
         error_log_message = [f'Erro ao realizar tarefa:\n'

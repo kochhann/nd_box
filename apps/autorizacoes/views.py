@@ -119,8 +119,10 @@ class EventoCreate(CreateView):
 
     def form_valid(self, form, *args, **kwargs):
         evento = form.save(commit=False)
+        # print(form.cleaned_data.get('data_termino'))
         evento.ativo = True
         evento.gerador = 1
+        evento.data_termino = evento.data_evento
         evento.save()
         tipo = form.cleaned_data.get('tipo_autorizacao')
         # inclui as categorias de autorização que serão necessárias
@@ -459,6 +461,7 @@ class RegistrarSolicitacao(View):
         aut = Autorizacao.objects.get(pk=self.kwargs['pk'])
         if aut:
             aut.autorizar()
+
         messages.success(self.request, 'Solicitação registrada com sucesso')
         return redirect('autorizacao-detail', self.kwargs['pk'])
 

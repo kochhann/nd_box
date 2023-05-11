@@ -2,6 +2,7 @@ import re
 import uuid
 from collections import namedtuple
 from datetime import datetime, date
+from django.utils import timezone
 from django.contrib.auth.models import (
     User,
     Group
@@ -128,7 +129,8 @@ def get_gv_unidade(gv_code):
                        "       UF.SIGLA AS ESTADO,"
                        "       P.CODIGOPESSOA AS GV_CODE,"
                        "       COALESCE(U.CNAE, '00000000') AS CNAE,"
-                       "       PJ.CNPJ AS CNPJ"
+                       "       PJ.CNPJ AS CNPJ,"
+                       "       U.CODIGOEMPRESA"
                        " FROM GVContabilidade.dbo.PAD_UNIDADE U"
                        "    INNER JOIN GVContabilidade.dbo.PAD_PESSOA P"
                        "        ON U.CODIGOPESSOA = P.CODIGOPESSOA"
@@ -146,7 +148,8 @@ def get_gv_unidade(gv_code):
                        "       UF.SIGLA AS ESTADO,"
                        "       P.CODIGOPESSOA AS GV_CODE,"
                        "       COALESCE(U.CNAE, '00000000') AS CNAE,"
-                       "       PJ.CNPJ AS CNPJ"
+                       "       PJ.CNPJ AS CNPJ,"
+                       "       U.CODIGOEMPRESA"
                        " FROM GVContabilidade.dbo.PAD_UNIDADE U"
                        "    INNER JOIN GVContabilidade.dbo.PAD_PESSOA P"
                        "        ON U.CODIGOPESSOA = P.CODIGOPESSOA"
@@ -393,6 +396,23 @@ def get_gv_unidade_from_nd_code(nd_code):
     return gv_code
 
 
+def get_nd_code_from_gv_unidade(unidade):
+    cursor = connection.cursor()
+    cursor.execute("SELECT"
+                   " 	E.CODIGO"
+                   " FROM NDSISTEMAS.DBO.ESTABELECIMENTOS E"
+                   "	INNER JOIN GVCONTABILIDADE.DBO.PAD_UNIDADE U"
+                   "	ON E.GVCODIGO = U.CODIGOUNIDADE"
+                   " WHERE U.CODIGOPESSOA = '%s' AND"
+                   "	U.CODIGOEMPRESA = '%s' AND"
+                   "	E.CODIGO < 50" % (unidade.gv_code, unidade.empresa))
+    qs = namedtuplefetchall(cursor)
+    gv_code = 2
+    if qs:
+        nd_code = qs[0].CODIGO
+    return nd_code
+
+
 def get_relatives(gv_code, year):
     cursor = connection.cursor()
     cursor.execute("SELECT P_ALUNO.NOME ALUNO,"
@@ -570,5 +590,25 @@ def error_log_writer(function_name, log_message):
     a.close()
 
 
-def nd_document_registration():
-    pass
+def nd_document_registration(autorizacao):
+    # year = str(autorizacao.evento.data_evento.year)
+    year = '2021'
+    gv_unidade = autorizacao.evento.eventounidade_set.first().unidade
+    nd_code = str(get_nd_code_from_gv_unidade(gv_unidade))
+    if len(nd_code) < 2:
+        nd_code = '0' + nd_code
+    table = f'nd_{nd_code}_escola.dbo.afastamento_{year}'
+    cursor = connection.cursor()
+    q = f'INSERT INTO {table} (' \
+        f'  ALUNO' \
+        f'  ,DATAINICIO' \
+        f'  ,DATAFIM' \
+        f'  ,MOTIVO_AFAST' \
+        f'  ,MOTIVO) ' \
+        f'VALUES (' \
+        f'  {autorizacao.aluno.matricula}' \
+        f'  ,\'{autorizacao.evento.data_evento}\'' \
+        f'  ,\'{autorizacao.evento.data_termino}\'' \
+        f'  ,\'{autorizacao.evento.descricao}\'' \
+        f'  ,null)'
+    cursor.execute(q)

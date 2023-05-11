@@ -382,8 +382,7 @@ def get_events(id_annals):
                    "    LEFT JOIN Z_LENIMAR.DBO.ANAISOBSERVACAOATIVIDADE OBS"
                    "        ON OBS.ID = ANAIS.IDATIVIDADEOBS"
                    " WHERE IDANAIS = '%s'"
-                   " ORDER BY IDATIVIDADEOBS,"
-                   "         DATA" % id_annals)
+                   " ORDER BY CONVERT(CHAR, DATA, 102)" % id_annals)
     activities_data = namedtuplefetchall(cursor)
     return activities_data
 
