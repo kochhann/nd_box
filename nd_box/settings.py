@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'apps.autorizacoes',
     'apps.agamotto',
     'apps.jund',
+    'apps.healt',
 ]
 
 MIDDLEWARE = [

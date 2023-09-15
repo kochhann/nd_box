@@ -1,0 +1,344 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block content %}
+<!-- Content
+============================================= -->
+<section id="content">
+	<div class="content-wrap">
+		<div class="container clearfix">
+
+			<div class="row clearfix">
+
+				<div class="col-lg">
+
+					<img src="{% static 'images/avatar.jpg' %}" class="alignleft img-circle img-thumbnail my-0" alt="Avatar" style="max-width: 84px;">
+
+					<div class="heading-block border-0">
+						<h3>{{paciente.nome}}</h3>
+						<span>{{paciente.get_age}}</span>
+					</div>
+
+					<div class="clear"></div>
+
+					<div class="row clearfix">
+
+						<div class="col-lg-12">
+
+							<div class="tabs tabs-alt clearfix" id="tabs-profile">
+
+								<ul class="tab-nav clearfix">
+									<li><a href="#tab-evolucao"><i class="icon-star-of-life"></i> Evolução</a></li>
+									<li><a href="#tab-cuidados"><i class="icon-notes-medical"></i> Prescrições</a></li>
+									<li><a href="#tab-afericoes"><i class="icon-pencil-ruler"></i> Aferições</a></li>
+									<li><a href="#tab-medidas"><i class="icon-pencil-ruler"></i> Medidas</a></li>
+									<li><a href="#tab-vacinas"><i class="icon-syringe"></i> Vacinas</a></li>
+								</ul>
+
+								<div class="tab-container">
+
+									<!--Evoluções-->
+									<div class="tab-content clearfix" id="tab-evolucao">
+
+										{% for item in evolucao %}
+										<div class="clear topmargin-sm"></div>
+										<ol class="commentlist border-0 m-0 p-0 clearfix">
+											<li class="comment even thread-even depth-1" id="li-comment-1">
+												<div id="comment-1" class="comment-wrap clearfix" style="padding: 20px 20px 20px 20px;">
+													<div class="comment-content clearfix" style="padding: 0 0 0 0px;">
+														<div class="comment-author">{{ item.profissional.nome }}<span>{{ item.data_criacao }}</span></div>
+														<div  style="padding-top:20px;">
+															<table class="table table-striped">
+																<colgroup>
+                      												<col width="10%">
+																	<col width="90%">
+																</colgroup>
+																<tbody>
+																	<tr>
+																		<td>Subjetivo</td>
+																		<td>{{item.subjetivo}}</td>
+																	</tr>
+																	<tr>
+																		<td>Objetivo</td>
+																		<td>{{item.objetivo}}</td>
+																	</tr>
+																	<tr>
+																		<td>Avaliação</td>
+																		<td>{{item.avalizção}}</td>
+																	</tr>
+																	<tr>
+																		<td>Plano</td>
+																		<td>{{item.plano}}</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+
+													</div>
+													<div class="clear"></div>
+												</div>
+											</li>
+										</ol>
+										{% empty %}
+										<div class="clear topmargin-sm"></div>
+										<h3>Sem informações</h3>
+										{% endfor %}
+
+									</div>
+
+									<!--Cuidados e prescrições-->
+									<div class="tab-content clearfix" id="tab-cuidados">
+
+										<div class="row col-mb-50 mb-0">
+
+											<div class="col-md-6">
+												<h4>Cuidados</h4>
+												{% for item in cuidados %}
+												<div class="clear topmargin-sm"></div>
+												<ol class="commentlist border-0 m-0 p-0 clearfix">
+													<li class="comment even thread-even depth-1" id="li-comment-1">
+														<div id="comment-1" class="comment-wrap clearfix" style="padding: 20px 20px 20px 20px;">
+															<div class="comment-content clearfix" style="padding: 0 0 0 0px;">
+																<div class="comment-author">{{ item.profissional.nome }}<span>{{ item.data_criacao }}</span></div>
+																<div  style="padding-top:20px;">
+																	<table class="table table-striped">
+																		<tbody>
+																			<tr>
+																				<td>{{item.cuidado}}</td>
+																			</tr>
+																			<tr>
+																				<td>{{item.observacao}}</td>
+																			</tr>
+																		</tbody>
+																	</table>
+																</div>
+
+															</div>
+															<div class="clear"></div>
+														</div>
+													</li>
+												</ol>
+												{% empty %}
+												<div class="clear topmargin-sm"></div>
+												<h3>Sem informações</h3>
+												{% endfor %}
+											</div>
+
+											<div class="col-md-6">
+												<h4>Medicamentos</h4>
+												{% for item in prescricao %}
+												<div class="clear topmargin-sm"></div>
+												<ol class="commentlist border-0 m-0 p-0 clearfix">
+													<li class="comment even thread-even depth-1" id="li-comment-1">
+														<div id="comment-1" class="comment-wrap clearfix" style="padding: 20px 20px 20px 20px;">
+															<div class="comment-content clearfix" style="padding: 0 0 0 0px;">
+																<div class="comment-author">{{ item.profissional.nome }}<span>{{ item.data_criacao }}</span></div>
+																<div  style="padding-top:20px;">
+																	<table class="table table-striped">
+																		<tbody>
+																			<tr>
+																				<td>{{item.farmaco}}, {{item.intervalo}} - {{item.horario}}, {{item.aplicacao}}</td>
+																			</tr>
+																			<tr>
+																				{% if item.data_fim is not none %}
+																				<td>{{item.data_inicio}} a {{item.data_fim}}</td>
+																				{% else %}
+																				<td>Início: {{item.data_inicio}}</td>
+																				{% endif %}
+																			</tr>
+																			<tr>
+																				<td>{{item.motivo}}</td>
+																			</tr>
+																		</tbody>
+																	</table>
+																</div>
+
+															</div>
+															<div class="clear"></div>
+														</div>
+													</li>
+												</ol>
+												{% empty %}
+												<div class="clear topmargin-sm"></div>
+												<h3>Sem informações</h3>
+												{% endfor %}
+											</div>
+
+										</div>
+
+									</div>
+
+									<!--Aferições-->
+									<div class="tab-content clearfix" id="tab-afericoes">
+										<div class="container clearfix">
+											<div class="table-responsive">
+												<table id="datatable2" class="table table-striped table-bordered" cellspacing="0" width="100%">
+													<colgroup>
+														<col width="15%">
+													<thead>
+														<tr>
+															<th>Data</th>
+															<th>Temp.</th>
+															<th>Press</th>
+															<th>Pa Med</th>
+															<th>Freq. Resp</th>
+															<th>Freq. Card</th>
+															<th>Pulso</th>
+															<th>Glic</th>
+															<th>Coleta</th>
+															<th>O<sub>2</sub></th>
+															<th>CO<sub>2</sub></th>
+														</tr>
+													</thead>
+													<tfoot>
+														<tr>
+															<th>Data</th>
+															<th>Temp.</th>
+															<th>Press</th>
+															<th>Pa Med</th>
+															<th>Freq. Resp</th>
+															<th>Freq. Card</th>
+															<th>Pulso</th>
+															<th>Glic</th>
+															<th>Coleta</th>
+															<th>O<sub>2</sub></th>
+															<th>CO<sub>2</sub></th>
+														</tr>
+													</tfoot>
+													<tbody>
+														{% for item in afericoes %}
+														<tr>
+															<td>{{item.data_criacao|date:"SHORT_DATE_FORMAT"}} - {{item.data_criacao|time:"H:i"}}</td>
+															<td>{{item.temperatura.normalize}}ºC</td>
+															<td>{{item.pressao_arterial}}</td>
+															<td>{{item.media.normalize}}</td>
+															<td>{{item.freq_respiratoria.normalize}}</td>
+															<td>{{item.freq_cardiaca.normalize}}</td>
+															<td>{{item.pulso.normalize}}</td>
+															<td>{{item.glicemia.normalize}}</td>
+															<td>{{item.coleta.normalize}}</td>
+															<td>{{item.saturacao_o2.normalize}}%</td>
+															<td>{{item.saturacao_co2.normalize}}%</td>
+														</tr>
+														{% endfor %}
+													</tbody>
+												</table>
+											</div>
+										</div>
+
+									</div>
+
+									<!--Medidas-->
+									<div class="tab-content clearfix" id="tab-medidas">
+
+										{% for item in medidas %}
+										<div class="clear topmargin-sm"></div>
+										<ol class="commentlist border-0 m-0 p-0 clearfix">
+											<li class="comment even thread-even depth-1" id="li-comment-1">
+												<div id="comment-1" class="comment-wrap clearfix" style="padding: 20px 20px 20px 20px;">
+													<div class="comment-content clearfix" style="padding: 0 0 0 0px;">
+														<div class="comment-author">{{ item.profissional.nome }}<span>{{ item.data_criacao }}</span></div>
+														<div  style="padding-top:20px;">
+															<table class="table table-striped">
+																<thead>
+																	<tr>
+																		<th>Sup. Corporal</th>
+																		<th>Quadril</th>
+																		<th>Cintura</th>
+																		<th>Circ. Braquial</th>
+																		<th>Pg. Cutâneas</th>
+																		<th>Panturrilha</th>
+																		<th>Altura</th>
+																		<th>Peso</th>
+																		<th>IMC</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>{{item.superficie_corporal.normalize}}</td>
+																		<td>{{item.quadril.normalize}}cm</td>
+																		<td>{{item.cintura.normalize}}cm</td>
+																		<td>{{item.circulacao_braquial.normalize}}cm</td>
+																		<td>{{item.pg_cutaneas.normalize}}cm</td>
+																		<td>{{item.panturrilha.normalize}}cm</td>
+																		<td>{{item.altura.normalize}}cm</td>
+																		<td>{{item.peso.normalize}}kg</td>
+																		<td>{{item.imc.normalize}}</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+														<p>Estado Nutricional: {{item.estado_nutricional}}</p>
+														<p>Observação: {{item.observacao}}</p>
+														<p>Dieta: {{item.dieta}}</p>
+
+													</div>
+													<div class="clear"></div>
+												</div>
+											</li>
+										</ol>
+										{% empty %}
+										<div class="clear topmargin-sm"></div>
+										<h3>Sem informações</h3>
+										{% endfor %}
+
+									</div>
+
+									<!--Vacinas-->
+									<div class="tab-content clearfix" id="tab-vacinas">
+
+										{% for item in vacinas %}
+										<div class="clear topmargin-sm"></div>
+										<ol class="commentlist border-0 m-0 p-0 clearfix">
+											<li class="comment even thread-even depth-1" id="li-comment-1">
+												<div id="comment-1" class="comment-wrap clearfix" style="padding: 20px 20px 20px 20px;">
+													<div class="comment-content clearfix" style="padding: 0 0 0 0px;">
+														<div class="comment-author">{{ item.vacina }}<span>{{ item.data }}</span></div>
+														<div  style="padding-top:20px;">
+															<table class="table table-striped">
+																<thead>
+																	<tr>
+																		<th>Lote</th>
+																		<th>Profissional</th>
+																		<th>Localidade</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>{{item.lote}}</td>
+																		<td>{{item.profissional}}</td>
+																		<td>{{item.localidade}}</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+
+													</div>
+													<div class="clear"></div>
+												</div>
+											</li>
+										</ol>
+										{% empty %}
+										<div class="clear topmargin-sm"></div>
+										<h3>Sem informações</h3>
+										{% endfor %}
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+				<div class="w-100 line d-block d-md-none"></div>
+
+			</div>
+
+		</div>
+	</div>
+</section><!-- #content end -->
+{% endblock %}

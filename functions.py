@@ -3,6 +3,7 @@ import uuid
 from collections import namedtuple
 from datetime import datetime, date
 from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import (
     User,
     Group
@@ -22,6 +23,16 @@ from apps.autorizacoes.models import (
 from apps.core.models import (
     Unidade,
     Turma
+)
+from apps.healt.models import (
+    Paciente,
+    Profissional,
+    Evolucao,
+    Afericoes,
+    Medidas,
+    Cuidados,
+    Prescricao,
+    Vacinacao
 )
 from hermes import send_welcome_mail
 
@@ -119,6 +130,308 @@ def get_file_path(_instance, filename):
 
 def nl2br(s):
     return '<br />\n'.join(s.split('\n'))
+
+
+def get_start_load_healt_module():
+    cursor = connection.cursor()
+    cnt_sucesso = 0
+    cnt_falha = 0
+    ## Paciente
+    cursor.execute("SELECT NOME"
+                   "	,NOMEPAI"
+                   "	,NOMEMAE"
+                   "	,DATANASCIMENTO"
+                   "	,FONECONTATO"
+                   "	,CODIGOND"
+                   "    ,DATAMORTE"
+                   "  FROM ND_SAUDE.DBO.PACIENTES")
+    qs = namedtuplefetchall(cursor)
+    if qs:
+        for item in qs:
+            cont = 'Não informado'
+            if item.FONECONTATO is not None:
+                cont = item.FONECONTATO
+            dcs = False
+            if item.DATAMORTE is not None:
+                dcs = True
+            paciente = Paciente(id=item.CODIGOND,
+                                nome=item.NOME,
+                                data_nascimento=item.DATANASCIMENTO,
+                                data_falecimento=item.DATAMORTE,
+                                nome_pai=item.NOMEPAI,
+                                nome_mae=item.NOMEMAE,
+                                contato=cont,
+                                falecido=dcs,
+                                nd_code=item.CODIGOND)
+            paciente.save()
+            cnt_sucesso += 1
+    print(f'Pacientes cadastrados: {cnt_sucesso}')
+    print('-------------')
+
+    ## Profissional
+    cursor.execute("SELECT M.ID"
+                   "	,CRM"
+                   "	,M.NOME"
+                   "	,CASE WHEN CELULAR IS NULL"
+                   "		THEN TELEFONECONSULTORIO"
+                   "		ELSE CELULAR"
+                   "	END CONTATO"
+                   "	,CASE WHEN M.IDESPECIALIDADE IS NULL"
+                   "        THEN 'Não consta'"
+                   "        ELSE E.NOME"
+                   "    END ESPECIALIDADE"
+                   " FROM ND_SAUDE.DBO.MEDICOS M"
+                   "	LEFT JOIN ND_SAUDE.DBO.MEDICOSESPECIALIDADES E"
+                   "	ON M.IDESPECIALIDADE = E.ID")
+    qs = namedtuplefetchall(cursor)
+    cnt_sucesso = 0
+    if qs:
+        for item in qs:
+            profissional = Profissional(nd_code=item.ID,
+                                        nome=item.NOME,
+                                        id_funcional=item.CRM,
+                                        especialidade=item.ESPECIALIDADE,
+                                        contato=item.CONTATO)
+            profissional.save()
+            cnt_sucesso += 1
+    print(f'Profissionais cadastrados: {cnt_sucesso}')
+    print('-------------')
+
+    ## Movimentos
+
+    ## Selecionar todos os pacientes e profissionais cadastrados
+    pacientes = Paciente.objects.filter(ativo=True)
+    profissionais = Profissional.objects.filter(ativo=True)
+
+    ## Evoluções
+    cursor.execute("SELECT"
+                   "	data"
+                   "	,subjetivo"
+                   "	,objetivo"
+                   "	,avaliacao"
+                   "	,plano"
+                   "	,IDPaciente"
+                   "	,IDMedicosProfissional"
+                   " FROM ND_SAUDE.DBO.EVOLUCAOSOAP")
+    qs = namedtuplefetchall(cursor)
+    cnt_sucesso = 0
+    cnt_falha = 0
+    if qs:
+        for item in qs:
+            try:
+                pro = profissionais.get(nd_code=item.IDMedicosProfissional)
+                pac = pacientes.get(nd_code=item.IDPaciente)
+            except ObjectDoesNotExist:
+                cnt_falha += 1
+                continue
+            evolucao = Evolucao(profissional=pro,
+                                paciente=pac,
+                                subjetivo=item.subjetivo,
+                                objetivo=item.objetivo,
+                                avaliacao=item.avaliacao,
+                                plano=item.plano)
+            evolucao.save()
+            cnt_sucesso += 1
+    print(f'Evoluções cadastradas: {cnt_sucesso}')
+    print(f'Cadastros falharam: {cnt_falha}')
+    print('-------------')
+
+    ## Sinais vitais
+    cursor.execute("SELECT I.data"
+                   "   ,I.temperatura"
+                   "   ,I.paSistolica"
+                   "   ,I.paDiastolica"
+                   "   ,I.pressaoArterialMedia"
+                   "   ,I.frequenciaRespiratoria"
+                   "   ,I.frequenciaCardiaca"
+                   "   ,I.pulsacao"
+                   "   ,I.glicemia"
+                   "   ,I.coleta"
+                   "   ,I.saturacaoO2"
+                   "   ,I.saturacaoCO2"
+                   "   ,I.IDPaciente"
+                   "   ,I.IDMedicosProfissional"
+                   " FROM ND_SAUDE.DBO.AFERICOESVITAISPACIENTE I")
+    qs = namedtuplefetchall(cursor)
+    cnt_sucesso = 0
+    cnt_falha = 0
+    if qs:
+        for item in qs:
+            try:
+                pro = profissionais.get(nd_code=item.IDMedicosProfissional)
+                pac = pacientes.get(nd_code=item.IDPaciente)
+            except ObjectDoesNotExist:
+                cnt_falha += 1
+                continue
+            afericao = Afericoes(profissional=pro,
+                                 paciente=pac,
+                                 temperatura=item.temperatura,
+                                 sistolica=item.paSistolica,
+                                 diastolica=item.paDiastolica,
+                                 media=item.pressaoArterialMedia,
+                                 freq_respiratoria=item.frequenciaRespiratoria,
+                                 freq_cardiaca=item.frequenciaCardiaca,
+                                 pulso=item.pulsacao,
+                                 glicemia=item.glicemia,
+                                 coleta=item.coleta,
+                                 saturacao_o2=item.saturacaoO2,
+                                 saturacao_co2=item.saturacaoCO2)
+            afericao.save()
+            cnt_sucesso += 1
+    print(f'Aferições cadastradas: {cnt_sucesso}')
+    print(f'Cadastros falharam: {cnt_falha}')
+    print('-------------')
+
+    ## Cuidados
+    cursor.execute("SELECT I.data"
+                   "    ,C.nome"
+                   "	,I.obsEnfermagem"
+                   "	,IDPaciente"
+                   "	,IDMedico"
+                   " FROM ND_SAUDE.DBO.pacienteCuidados I INNER JOIN"
+                   "	ND_SAUDE.DBO.cuidados C ON I.IDCuidados = C.ID")
+    qs = namedtuplefetchall(cursor)
+    cnt_sucesso = 0
+    cnt_falha = 0
+    if qs:
+        for item in qs:
+            try:
+                pro = profissionais.get(nd_code=item.IDMedico)
+                pac = pacientes.get(nd_code=item.IDPaciente)
+            except ObjectDoesNotExist:
+                cnt_falha += 1
+                continue
+            cuidado = Cuidados(profissional=pro,
+                               paciente=pac,
+                               cuidado=item.nome,
+                               observacao=item.obsEnfermagem)
+            cuidado.save()
+            cnt_sucesso += 1
+    print(f'Cuidados cadastrados: {cnt_sucesso}')
+    print(f'Cadastros falharam: {cnt_falha}')
+    print('-------------')
+
+    ## Medidas
+    cursor.execute("SELECT INS.dataAlteracao"
+                   "    ,INS.areadeSuperficieCorporal"
+                   "	,INS.quadril"
+                   "	,INS.cintura"
+                   "	,INS.circulacaoBraquial"
+                   "	,INS.pgCutanea"
+                   "	,EN.descricao"
+                   "	,INS.circunPanturrilha"
+                   "	,INS.altura"
+                   "	,INS.pesoAtual"
+                   "	,INS.IMC"
+                   "	,INS.obsNutricao"
+                   "	,INS.dieta"
+                   "	,INS.IDPaciente"
+                   "	,INS.IDMedicosProfissional"
+                   " FROM ND_SAUDE.DBO.medicaoAntropometrica INS"
+                   "     INNER JOIN ND_SAUDE.DBO.estadoNutricional EN"
+                   "		ON INS.IDEstadoNutricional = EN.ID")
+    qs = namedtuplefetchall(cursor)
+    cnt_sucesso = 0
+    cnt_falha = 0
+    if qs:
+        for item in qs:
+            try:
+                pro = profissionais.get(nd_code=item.IDMedicosProfissional)
+                pac = pacientes.get(nd_code=item.IDPaciente)
+            except ObjectDoesNotExist:
+                cnt_falha += 1
+                continue
+            medida = Medidas(profissional=pro,
+                             paciente=pac,
+                             superficie_corporal=item.areadeSuperficieCorporal,
+                             quadril=item.quadril,
+                             cintura=item.cintura,
+                             circulacao_braquial=item.circulacaoBraquial,
+                             pg_cutaneas=item.pgCutanea,
+                             estado_nutricional=item.descricao,
+                             panturrilha=item.circunPanturrilha,
+                             altura=item.altura,
+                             peso=item.pesoAtual,
+                             imc=item.IMC,
+                             observacao=item.obsNutricao,
+                             dieta=item.dieta)
+            medida.save()
+            cnt_sucesso += 1
+    print(f'Medidas cadastradas: {cnt_sucesso}')
+    print(f'Cadastros falharam: {cnt_falha}')
+    print('-------------')
+
+    ## Prescrições
+    cursor.execute("SELECT M.nomeComercial"
+                   "	   ,INS.dtInicio"
+                   "	   ,INS.dtFim"
+                   "	   ,INS.motivo"
+                   "	   ,TA.nome"
+                   "	   ,INS.intervalomedicacao"
+                   "	   ,INS.horario"
+                   "	   ,INS.IDPaciente"
+                   "	   ,INS.IDMedico"
+                   " FROM ND_SAUDE.DBO.prescricoesMedicamentos INS"
+                   "	INNER JOIN ND_SAUDE.DBO.medicamentos M on INS.IDfarmaco = M.ID"
+                   "	INNER JOIN ND_SAUDE.DBO.tiposAplicacao TA on INS.IDtipoAplicacao = TA.ID")
+    qs = namedtuplefetchall(cursor)
+    cnt_sucesso = 0
+    cnt_falha = 0
+    if qs:
+        for item in qs:
+            try:
+                pro = profissionais.get(nd_code=item.IDMedico)
+                pac = pacientes.get(nd_code=item.IDPaciente)
+            except ObjectDoesNotExist:
+                cnt_falha += 1
+                continue
+            prescricao = Prescricao(profissional=pro,
+                                    paciente=pac,
+                                    farmaco=item.nomeComercial,
+                                    aplicacao=item.nome,
+                                    data_inicio=item.dtInicio,
+                                    data_fim=item.dtFim,
+                                    motivo=item.motivo,
+                                    intervalo=item.intervalomedicacao,
+                                    horario=item.horario)
+            prescricao.save()
+            cnt_sucesso += 1
+    print(f'Prescrições cadastradas: {cnt_sucesso}')
+    print(f'Cadastros falharam: {cnt_falha}')
+    print('-------------')
+
+    ## Vacinas
+    cursor.execute("SELECT INS.data"
+                   "    ,V.nome"
+                   "	,INS.lote"
+                   "	,INS.nroCarteira"
+                   "	,INS.localidade"
+                   "	,INS.IDPaciente"
+                   "	,INS.nomeProfissional"
+                   " FROM ND_SAUDE.DBO.vacinacaoPacientes INS"
+                   "	INNER JOIN ND_SAUDE.DBO.vacinas V on INS.IDVacina = V.ID")
+    qs = namedtuplefetchall(cursor)
+    cnt_sucesso = 0
+    cnt_falha = 0
+    if qs:
+        for item in qs:
+            try:
+                pac = pacientes.get(nd_code=item.IDPaciente)
+            except ObjectDoesNotExist:
+                cnt_falha += 1
+                continue
+            vacina = Vacinacao(paciente=pac,
+                               profissional=item.nomeProfissional,
+                               vacina=item.nome,
+                               lote=item.lote,
+                               id_carteira=item.nroCarteira,
+                               localidade=item.localidade,
+                               data=item.data)
+            vacina.save()
+            cnt_sucesso += 1
+    print(f'Vacinações cadastradas: {cnt_sucesso}')
+    print(f'Cadastros falharam: {cnt_falha}')
+    print('-------------')
 
 
 def get_gv_unidade(gv_code):

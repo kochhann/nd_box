@@ -9,8 +9,7 @@ from apps.core.models import (
 
 @admin.register(Unidade)
 class UnidadeAdmin(admin.ModelAdmin):
-    list_display = ['nome', 'cidade', 'cnpj', 'empresa', 'is_school', 'ativo']
-    list_filter = ['empresa']
+    list_display = ['nome', 'cidade', 'cnpj', 'is_school', 'ativo']
 
 
 @admin.register(Curso)

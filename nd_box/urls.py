@@ -11,6 +11,7 @@ urlpatterns = [
     path('reports/', include('apps.reports.urls')),
     path('privacidade/', include('apps.privacidade.urls')),
     path('autorizacoes/', include('apps.autorizacoes.urls')),
+    path('healt/', include('apps.healt.urls')),
     path('jund/', include('apps.jund.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

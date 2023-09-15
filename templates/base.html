@@ -407,6 +407,24 @@
                 },
             });
         });
+        $(document).ready(function () {
+            $('#datatable2').dataTable({
+                language: {
+                    lengthMenu: 'Exibindo _MENU_ registros por página',
+                    zeroRecords: 'Desculpe, sem registros para exibir',
+                    info: 'Pág _PAGE_ de _PAGES_',
+                    infoEmpty: 'Sem registros',
+                    infoFiltered: '(de um total de _MAX_ vagas)',
+                    search: 'Busca',
+                    paginate: {
+                        first: 'Primeiro',
+                        last: 'Último',
+                        next: 'Próximo',
+                        previous: 'Anterior'
+                    },
+                },
+            });
+        });
 
 	</script>
 
