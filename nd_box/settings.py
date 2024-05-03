@@ -158,6 +158,7 @@ if not os.path.exists(os.path.join(BASE_DIR, 'bkp_db')):
     os.makedirs(os.path.join(BASE_DIR, 'bkp_db'))
 BKP_DB = os.path.join(BASE_DIR, 'bkp_db')
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 

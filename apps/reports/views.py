@@ -211,7 +211,7 @@ def get_deaths_data(id_house, slctd_year):
                    " FROM ND_PROVINCIA.DBO.IRMAS"
                    " WHERE YEAR(DATAMORTE)='%s' AND CASAATUAL IN ("
                    " SELECT CODIGO FROM ND_PROVINCIA.DBO.TCASAS WHERE CODIGO='%s')"
-                   " ORDER BY DATAMORTE" % (slctd_year, id_house))
+                   " ORDER BY convert(datetime, DATAMORTE, 103)" % (slctd_year, id_house))
     deaths_data = namedtuplefetchall(cursor)
     return deaths_data
 
@@ -220,46 +220,49 @@ def get_healthcare_data(slctd_year):
     cursor = connection.cursor()
     cursor.execute("SELECT P.CODIGOND,"
                    "       M.ID,"
-                   "       P.NOME,"
+                   "	   CASE WHEN I.NOMERELIGIOSO IS NULL"
+                   "			THEN P.NOME"
+                   "			ELSE I.NOMERELIGIOSO"
+                   "	   END NOME,"
                    "       P.LOCALTRABALHO,"
                    "       M.PERIODO AS PERIODO,"
                    "       FORMAT(M.DATA,'dd/MM/yyyy') DATA,"
                    "       FORMAT(M.DATAALTA,'dd/MM/yyyy') DATAALTA,"
                    "       M.DESCRICAO"
-                   " FROM ND_SAUDE.DBO.PACIENTES AS P,"
-                   "     ND_SAUDE.DBO.MOVIMENTO AS M"
+                   " FROM ND_SAUDE.DBO.PACIENTES AS P"
+                   "		INNER JOIN ND_SAUDE.DBO.MOVIMENTO AS M ON P.CODIGOND = M.IDPACIENTE"
+                   "		LEFT JOIN ND_PROVINCIA.DBO.IRMAS AS I ON I.CODIGOND = P.CODIGOND"
                    " WHERE M.TIPO = 2"
-                   "      AND M.IDPACIENTE = P.CODIGOND"
-                   "      AND YEAR(M.DATA) = '%s'"
-                   " ORDER BY DATA" % slctd_year)
+                   "     AND YEAR(M.DATA) = '%s'"
+                   "     ORDER BY DATA" % slctd_year)
     healthcare_data = namedtuplefetchall(cursor)
-    print('healtcare ins: ' + str(len(healthcare_data)))
     return healthcare_data
 
 
 def get_outpatient_data(slctd_year):
     cursor = connection.cursor()
     cursor.execute("SELECT P.CODIGOND AS CODIGOND,"
-                   "       P.NOME AS NOME,"
+                   "       CASE WHEN I.NOMERELIGIOSO IS NULL"
+                   "			THEN P.NOME"
+                   "			ELSE I.NOMERELIGIOSO"
+                   "	   END NOME,"
                    "       M.DESCRICAO AS DESCRICAO,"
                    "       MED.NOME AS MEDICO,"
                    "       H.NOME AS HOSPITAL,"
                    "       C.NOME AS CIDADE,"
                    "       C.ESTADO AS UF,"
                    "	   COUNT(1) AS QUANT"
-                   " FROM ND_SAUDE.DBO.HOSPITAIS AS H,"
-                   "     ND_SAUDE.DBO.MEDICOS AS MED,"
-                   "     ND_SAUDE.DBO.PACIENTES AS P,"
-                   "     ND_SAUDE.DBO.MOVIMENTO AS M,"
-                   "     ND_SAUDE.DBO.CIDADES AS C"
+                   " FROM ND_SAUDE.DBO.MOVIMENTO AS M"
+                   "		INNER JOIN ND_SAUDE.DBO.MEDICOS AS MED ON M.IDMEDICO = MED.ID"
+                   "		INNER JOIN ND_SAUDE.DBO.HOSPITAIS AS H ON M.LOCAL = H.ID"
+                   "		INNER JOIN ND_SAUDE.DBO.PACIENTES AS P ON M.IDPACIENTE = P.CODIGOND"
+                   "		INNER JOIN ND_SAUDE.DBO.CIDADES AS C ON C.ID = H.CIDADE"
+                   "		LEFT JOIN ND_PROVINCIA.DBO.IRMAS AS I ON I.CODIGOND = P.CODIGOND"
                    " WHERE M.TIPO = 3"
-                   "      AND M.IDMEDICO = MED.ID"
                    "      AND YEAR(M.DATA) = '%s'"
-                   "      AND M.LOCAL = H.ID"
-                   "      AND M.IDPACIENTE = P.CODIGOND"
-                   "      AND C.ID = H.CIDADE"
                    " GROUP BY P.CODIGOND,"
                    "      P.NOME,"
+                   "	  I.NOMERELIGIOSO,"
                    "      M.DESCRICAO,"
                    "      MED.NOME,"
                    "      H.NOME,"
@@ -296,7 +299,7 @@ def get_medical_care_data(id_annals, id_house):
     return medical_care_data
 
 
-def get_other_helpers_data(id_annals, id_house):
+def get_other_helpers_data(id_annals):
     cursor = connection.cursor()
     cursor.execute("SELECT IDCASA,"
                    "       IDANAIS,"
@@ -304,9 +307,7 @@ def get_other_helpers_data(id_annals, id_house):
                    "       ATIVIDADE"
                    " FROM Z_LENIMAR.DBO.ANAISOUTROSCOLABORADORES"
                    " WHERE IDANAIS = '%s'"
-                   "      AND IDCASA = '%s'"
-                   "      AND NOME LIKE '%s'"
-                   " ORDER BY ID" % (id_annals, id_house, '%irmã%'))
+                   " ORDER BY ID" % id_annals)
     other_helpers_data = namedtuplefetchall(cursor)
     return other_helpers_data
 
@@ -314,29 +315,33 @@ def get_other_helpers_data(id_annals, id_house):
 def get_surgical_data(slctd_year):
     cursor = connection.cursor()
     cursor.execute("SELECT P.CODIGOND AS CODIGOND,"
-                   "       P.NOME AS NOME,"
+                   "       CASE WHEN I.NOMERELIGIOSO IS NULL"
+                   "			THEN P.NOME"
+                   "			ELSE I.NOMERELIGIOSO"
+                   "	   END NOME,"
                    "       M.DESCRICAO AS DESCRICAO,"
                    "       MED.NOME AS MEDICO,"
                    "       H.NOME AS HOSPITAL,"
                    "       C.NOME AS CIDADE,"
                    "       C.ESTADO AS UF"
-                   " FROM ND_SAUDE.DBO.HOSPITAIS AS H,"
-                   "     ND_SAUDE.DBO.MEDICOS AS MED,"
-                   "     ND_SAUDE.DBO.PACIENTES AS P,"
-                   "     ND_SAUDE.DBO.MOVIMENTO AS M,"
-                   "     ND_SAUDE.DBO.CIDADES AS C"
+                   " FROM ND_SAUDE.DBO.MOVIMENTO AS M"
+                   "		INNER JOIN ND_SAUDE.DBO.MEDICOS AS MED ON M.IDMEDICO = MED.ID"
+                   "		INNER JOIN ND_SAUDE.DBO.HOSPITAIS AS H ON M.LOCAL = H.ID"
+                   "		INNER JOIN ND_SAUDE.DBO.PACIENTES AS P ON M.IDPACIENTE = P.CODIGOND"
+                   "		INNER JOIN ND_SAUDE.DBO.CIDADES AS C ON H.CIDADE = C.ID"
+                   "		LEFT JOIN ND_PROVINCIA.DBO.IRMAS I ON I.CODIGOND = P.CODIGOND"
                    " WHERE M.TIPO = 1"
                    "      AND M.IDMEDICO = MED.ID"
                    "      AND YEAR(M.DATA) = '%s'"
                    "      AND M.LOCAL = H.ID"
-                   "      AND M.IDPACIENTE = P.CODIGOND"
+                   "     AND M.IDPACIENTE = P.CODIGOND"
                    "      AND C.ID = H.CIDADE"
                    " ORDER BY M.DATA" % slctd_year)
     surgical_data = namedtuplefetchall(cursor)
     return surgical_data
 
 
-def get_resident_data(id_house):
+def get_resident_data(id_house, slctd_year):
     cursor = connection.cursor()
     cursor.execute("SELECT IDCASA,"
                    "       FORMAT(DATAENTRADA,'dd/MM/yyyy') DATAENTRADA,"
@@ -344,7 +349,8 @@ def get_resident_data(id_house):
                    "       OBSERVACAO"
                    " FROM Z_LENIMAR.DBO.ANAISRESIDENTESRECANTO"
                    " WHERE DATASAIDA IS NULL"
-                   " AND IDCASA = '%s' " % id_house)
+                   " AND IDCASA = '%s' "
+                   " AND YEAR(DATAENTRADA) <= '%s'" % (id_house, slctd_year))
     residents_data = namedtuplefetchall(cursor)
     return residents_data
 
@@ -577,6 +583,7 @@ class PrintStatisticsView(View):
                         teatcher.append(a)
                     else:
                         regular.append(a)
+                        print('Linha 586 - adicionei a regular')
                 # ------ #
                 # TODO: Retornar trecho abaixo após correção
                 # if a.SINDICATO == '0001':
@@ -728,7 +735,10 @@ class PrintStatisticsView(View):
                 for a in outs:
                     elements.append(Spacer(1, 0.25 * cm))
                     elements.append(Paragraph(a.NOMERELIGIOSO.title() + ', na data de ' + a.SAIDACONGREGACAO, c1))
-                    elements.append(Paragraph(a.OBSSAIDA, c1))
+                    obs_s = 'Sem informações.'
+                    if a.OBSSAIDA:
+                        obs_s = a.OBSSAIDA
+                    elements.append(Paragraph(obs_s, c1))
                     elements.append(Spacer(1, 0.25 * cm))
 
             if len(deaths_data) > 0:
@@ -828,7 +838,7 @@ class PrintStatisticsView(View):
         ## RECANTO APARECIDA
         if recanto:
             ## Residentes
-            resident = get_resident_data(id_house)
+            resident = get_resident_data(id_house, slctd_year)
             res_number = str(len(resident))
             res_design = 'senhora leiga que está'
             if len(resident) > 1:
@@ -1027,8 +1037,8 @@ class PrintStatisticsView(View):
                     previous_item = item.NOME
 
             ## Outros colaboradores
-            other_helpers_data = get_other_helpers_data(id_annals, id_house)
-            elements.append(Paragraph('Irmãs de outras comunidades que colaboraram na comunidade Recanto Aparecida em'
+            other_helpers_data = get_other_helpers_data(id_annals)
+            elements.append(Paragraph('Irmãs de outras comunidades que colaboraram e prestadores de serviço que atuaram na comunidade do Recanto Aparecida em'
                                       ' ' + slctd_year + ':', h1))
             elements.append(Spacer(1, 0.25 * cm))
             data = [[Paragraph('', h1),
@@ -1078,7 +1088,7 @@ class PrintStatisticsView(View):
                     else:
                         woman += 1
                 for b in emp_org:
-                    if a.SEXO == 'M':
+                    if b.SEXO == 'M':
                         man += 1
                     else:
                         woman += 1
@@ -1336,13 +1346,13 @@ class PrintStatisticsView(View):
                         if a.NOME.title() == 'Tais Streb Artmann':
                             if slctd_year in ('2020', '2021'):
                                 desc = 'Assistente de Ensino'
-                                hr_cont = str(round(150.00/Decimal(4.5)))
+                                hr_cont = str(round(Decimal(150.00)/Decimal(4.5)))
                             if slctd_year == '2022':
                                 desc = 'Prof. Ens. Fundamental'
-                                hr_cont = str(round(94.5 / Decimal(4.5)))
+                                hr_cont = str(round(Decimal(94.5) / Decimal(4.5)))
                             else:
                                 desc = 'Coord. Pedagógica'
-                                hr_cont = str(round(200.00 / Decimal(4.5)))
+                                hr_cont = str(round(Decimal(200.00) / Decimal(4.5)))
                         # ------ #
                         data = [[Paragraph(str_count, c2),
                                  Paragraph(str_name.title(), c2),
@@ -1472,19 +1482,26 @@ class PrintStatisticsView(View):
                     for a in regular:
                         count += 1
                         desc = a.DESCRICAO40
-                        hr_cont = str(round(a.HORASCONTRATUAIS/Decimal(4.5)))
+                        str_hrs = 'RPA'
+                        hrs = None
+                        if a.HORASCONTRATUAIS:
+                            hrs = a.HORASCONTRATUAIS / Decimal(4.5)
+                        if hrs:
+                            hr_cont = str(round(hrs))
+                        else:
+                            hr_cont = str_hrs
                         # TODO: Remover as linhas abaixo até a marcação, após atualização da
                         #  consulta nos contratos de trabalho
                         if a.NOME.title() == 'Tais Streb Artmann':
                             if slctd_year in ('2020', '2021'):
                                 desc = 'Assistente de Ensino'
-                                hr_cont = str(round(150.00/Decimal(4.5)))
+                                hr_cont = str(round(Decimal(150.00)/Decimal(4.5)))
                             if slctd_year == '2022':
                                 desc = 'Prof. Ens. Fundamental'
-                                hr_cont = str(round(94.5 / Decimal(4.5)))
+                                hr_cont = str(round(Decimal(94.5) / Decimal(4.5)))
                             else:
                                 desc = 'Coord. Pedagógica'
-                                hr_cont = str(round(200.00 / Decimal(4.5)))
+                                hr_cont = str(round(Decimal(200.00) / Decimal(4.5)))
                         # ------ #
                         data = [[Paragraph(str(count), c2),
                                  Paragraph(a.NOME.title(), c2),
